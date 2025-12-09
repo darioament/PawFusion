@@ -1,4 +1,4 @@
 package fina.dario.pawfusion.core.domain
 
-interface Error {
-}
+// just a marker to represent error
+interface Error
