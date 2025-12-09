@@ -1,5 +1,6 @@
 package fina.dario.pawfusion.breed.data.remote.impl
 
+import fina.dario.pawfusion.breed.data.remote.dto.BreedDetailResponse
 import fina.dario.pawfusion.breed.data.remote.dto.BreedsResponseDto
 import fina.dario.pawfusion.breed.domain.api.BreedsRemoteDataSource
 import fina.dario.pawfusion.core.domain.Result
@@ -10,7 +11,7 @@ import io.ktor.client.request.get
 
 
 private const val BASE_URL = "https://dogapi.dog/api/v2"
-class KtorCoinsRemoteDataSource(
+class KtorBreedsRemoteDataSource(
     private val httpClient: HttpClient
 ): BreedsRemoteDataSource {
     override suspend fun getListOfBreeds(): Result<BreedsResponseDto, DataError.Remote> {
@@ -20,7 +21,7 @@ class KtorCoinsRemoteDataSource(
         }
     }
 
-    override suspend fun getBreedById(breedId: String): Result<BreedsResponseDto, DataError.Remote>{
+    override suspend fun getBreedById(breedId: String): Result<BreedDetailResponse, DataError.Remote>{
         return safeCall {
             httpClient.get("$BASE_URL/breeds/{$breedId}")
         }

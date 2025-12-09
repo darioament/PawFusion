@@ -54,6 +54,7 @@ kotlin {
             //potrebno je ubaciti dependency za room i/ili sqlLite
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.bundles.ktor)
+            implementation(libs.ktor.client.darwin)
 
 
             api(libs.koin.core)
@@ -97,6 +98,8 @@ compose.resources {
     publicResClass = true
     packageOfResClass = "fina.dario.pawfusion.generated.resources"
 }
+
+
 
 room {
     schemaDirectory("$projectDir/schemas")
