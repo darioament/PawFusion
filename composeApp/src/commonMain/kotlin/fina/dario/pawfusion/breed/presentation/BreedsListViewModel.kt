@@ -1,10 +1,13 @@
 package fina.dario.pawfusion.breed.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import fina.dario.pawfusion.breed.domain.GetBreedsListUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onStart
 import fina.dario.pawfusion.core.domain.Result
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 
@@ -16,7 +19,11 @@ class BreedsListViewModel(
     val state = _state
         .onStart{
             getAllBreeds()
-        }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = BreedState()
+        )
 
     private suspend fun getAllBreeds(){
         when(val breedsResponse = getBreedsListUseCase.execute()){

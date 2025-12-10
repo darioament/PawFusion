@@ -29,8 +29,13 @@ kotlin {
             isStatic = true
         }
     }
+
     
     sourceSets {
+        iosMain.dependencies {
+            implementation("io.ktor:ktor-client-darwin:3.0.0")
+            implementation("io.ktor:ktor-client-core:3.0.0")
+        }
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -54,7 +59,7 @@ kotlin {
             //potrebno je ubaciti dependency za room i/ili sqlLite
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.bundles.ktor)
-            implementation(libs.ktor.client.darwin)
+
 
 
             api(libs.koin.core)
