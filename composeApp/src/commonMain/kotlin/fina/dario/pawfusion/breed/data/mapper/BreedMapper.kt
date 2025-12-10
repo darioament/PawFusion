@@ -1,6 +1,7 @@
 package fina.dario.pawfusion.breed.data.mapper
 
 import fina.dario.pawfusion.breed.data.remote.dto.BreedItemDto
+import fina.dario.pawfusion.breed.data.remote.dto.BreedLifeDto
 import fina.dario.pawfusion.breed.domain.Breed.Breed
 import fina.dario.pawfusion.breed.domain.Breed.BreedAttributes
 import fina.dario.pawfusion.breed.domain.Breed.BreedLife
@@ -15,9 +16,11 @@ fun BreedItemDto.toBreedModel() = BreedModel(
             name = attributes.name,
             description = attributes.description
         ),
-        life = BreedLife(
-            max = life.max,
-            min = life.min
-        ),
+        life = life.toBreedLife()
     )
+)
+
+fun BreedLifeDto.toBreedLife() = BreedLife(
+    max = max,
+    min = min
 )
