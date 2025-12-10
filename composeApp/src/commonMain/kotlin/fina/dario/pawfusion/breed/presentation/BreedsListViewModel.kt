@@ -35,7 +35,7 @@ class BreedsListViewModel(
                                 id = breedItem.breed.id,
                                 type = breedItem.breed.type,
                                 description = breedItem.breed.attributes.description,
-                                averageLifeSpan = calculateAverageLifeSpan(breedItem.breed.life.min, breedItem.breed.life.max)
+                                averageLifeSpan = calculateAverageLifeSpan(breedItem.breed.attributes.life.min, breedItem.breed.attributes.life.max)
                             )
                         }
                     )
@@ -48,6 +48,7 @@ class BreedsListViewModel(
                         error = null // TODO: handle breedResponse.error.toUiText()
                     )
                 }
+
             }
         }
     }
@@ -55,3 +56,5 @@ class BreedsListViewModel(
     private fun calculateAverageLifeSpan(min: Int, max: Int) = (min + max) / 2
 
 }
+
+

@@ -13,7 +13,7 @@ class GetBreedsListUseCase(
 ){
     suspend fun execute(): Result<List<BreedModel>, DataError.Remote>{
         return client.getListOfBreeds().map { dto ->
-            dto.data.breeds.map{ it.toBreedModel() }
+            dto.data.map { it.toBreedModel() }
         }
     }
 }

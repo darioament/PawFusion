@@ -34,11 +34,18 @@ fun BreedsListScreen(
     val breedListViewModel = koinViewModel<BreedsListViewModel>()
 
     val state by breedListViewModel.state.collectAsStateWithLifecycle()
-
-    BreedsListComponent(
+   Box(
+       modifier = Modifier.fillMaxSize(),
+       contentAlignment = Alignment.Center
+   ){
+       Text(
+           text = if(state.breeds.isEmpty()) "Breeds are empty" else "Breeds have items"
+       )
+   }
+    /*BreedsListComponent(
         state = state,
         onBreedClicked = onBreedClicked
-    )
+    )*/
 }
 
 

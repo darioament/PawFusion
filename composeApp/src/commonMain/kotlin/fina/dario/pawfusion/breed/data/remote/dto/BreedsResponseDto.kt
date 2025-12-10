@@ -4,12 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BreedsResponseDto(
-    val data: BreedsListDto
-)
-
-@Serializable
-data class BreedsListDto(
-    val breeds: List<BreedItemDto>
+    val data: List<BreedItemDto>
 )
 
 @Serializable
@@ -17,17 +12,29 @@ data class BreedItemDto(
     val id: String,
     val type: String,
     val attributes: BreedAttributesDto,
-    val life: BreedLifeDto,
+
 )
 
 @Serializable
 data class BreedAttributesDto(
     val name: String,
-    val description: String
+    val description: String,
+    val hypoallergenic: Boolean,
+    val life: BreedLifeDto,
+    val male_life: BreedWeightDto,
+    val female_life: BreedWeightDto,
+
 )
 @Serializable
 data class BreedLifeDto(
     val max: Int,
     val min: Int
+)
+
+
+@Serializable
+data class BreedWeightDto(
+    val min: Int,
+    val max: Int
 )
 

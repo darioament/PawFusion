@@ -2,11 +2,12 @@ package fina.dario.pawfusion.breed.data.mapper
 
 import fina.dario.pawfusion.breed.data.remote.dto.BreedItemDto
 import fina.dario.pawfusion.breed.data.remote.dto.BreedLifeDto
+import fina.dario.pawfusion.breed.data.remote.dto.BreedWeightDto
 import fina.dario.pawfusion.breed.domain.Breed.Breed
 import fina.dario.pawfusion.breed.domain.Breed.BreedAttributes
 import fina.dario.pawfusion.breed.domain.Breed.BreedLife
+import fina.dario.pawfusion.breed.domain.Breed.BreedWeight
 import fina.dario.pawfusion.breed.domain.model.BreedModel
-import kotlin.String
 
 fun BreedItemDto.toBreedModel() = BreedModel(
     breed = Breed(
@@ -14,13 +15,20 @@ fun BreedItemDto.toBreedModel() = BreedModel(
         type = type,
         attributes = BreedAttributes(
             name = attributes.name,
-            description = attributes.description
+            description = attributes.description,
+            hypoallergenic = attributes.hypoallergenic,
+            life = attributes.life.toBreedLife(),
+            male_life = attributes.male_life.toBreedWeight(),
+            female_life = attributes.female_life.toBreedWeight()
         ),
-        life = life.toBreedLife()
     )
 )
 
 fun BreedLifeDto.toBreedLife() = BreedLife(
+    min = min,
     max = max,
-    min = min
+)
+fun BreedWeightDto.toBreedWeight() = BreedWeight(
+    min = min,
+    max = max,
 )
