@@ -18,8 +18,8 @@ fun BreedItemDto.toBreedModel() = BreedModel(
             description = attributes.description,
             hypoallergenic = attributes.hypoallergenic,
             life = attributes.life.toBreedLife(),
-            male_life = attributes.male_life.toBreedWeight(),
-            female_life = attributes.female_life.toBreedWeight()
+            male_life = attributes.male_weight.toBreedWeight(),
+            female_life = attributes.female_weight.toBreedWeight()
         ),
     )
 )

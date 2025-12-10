@@ -21,8 +21,8 @@ data class BreedAttributesDto(
     val description: String,
     val hypoallergenic: Boolean,
     val life: BreedLifeDto,
-    val male_life: BreedWeightDto,
-    val female_life: BreedWeightDto,
+    val male_weight: BreedWeightDto,
+    val female_weight: BreedWeightDto,
 
 )
 @Serializable
