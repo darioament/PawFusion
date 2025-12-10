@@ -26,10 +26,6 @@ object HttpClientFactory {
                     }
                 )
             }
-            install(Logging) {
-                logger = Logger.DEFAULT
-                level = LogLevel.ALL
-            }
             install(HttpTimeout) {
                 socketTimeoutMillis = 20_000L
                 requestTimeoutMillis = 20_000L
@@ -37,6 +33,14 @@ object HttpClientFactory {
             install(HttpCache)
             defaultRequest {
                 contentType(ContentType.Application.Json)
+            }
+            install(Logging) {
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        co.touchlab.kermit.Logger.d { message }
+                    }
+                }
+                level = LogLevel.ALL
             }
         }
     }
