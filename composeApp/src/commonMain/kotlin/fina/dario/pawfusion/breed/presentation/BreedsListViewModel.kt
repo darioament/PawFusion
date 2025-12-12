@@ -32,6 +32,7 @@ class BreedsListViewModel(
     val state = _state.asStateFlow().onStart {
         CoroutineScope(Dispatchers.IO).launch {
             launch{
+                setLoadingPhase()
                 getAllBreeds()
                 setLoadingPhaseDone()
             }
@@ -51,8 +52,15 @@ class BreedsListViewModel(
         }
     }
 
-    private suspend fun getAllBreeds(){
+    private suspend fun setLoadingPhase() {
+        _state.update {
+            it.copy(
+                loading = true
+            )
+        }
+    }
 
+    private suspend fun getAllBreeds(){
         when(val breedsResponse = getBreedsListUseCase.execute()){
             is Result.Success -> {
                 log.i("Result is success")
@@ -66,7 +74,6 @@ class BreedsListViewModel(
                                 averageLifeSpan = calculateAverageLifeSpan(breedItem.breed.attributes.life.min, breedItem.breed.attributes.life.max)
                             )
                         },
-                        loading = true,
                     )
                 }
             }

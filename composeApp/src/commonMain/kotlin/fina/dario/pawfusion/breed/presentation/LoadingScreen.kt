@@ -31,8 +31,8 @@ fun LoadingSpinner() {
         modifier = Modifier.fillMaxSize()
     ) {
         CircularProgressIndicator(
-            color = Color.Gray, // Customize color as needed
-            strokeWidth = 4.dp // Adjust thickness
+            color = Color.Gray,
+            strokeWidth = 4.dp
         )
     }
 }
