@@ -6,5 +6,6 @@ import org.jetbrains.compose.resources.StringResource
 @Stable
 data class BreedState(
     val error: StringResource? = null,
+    val loading: Boolean = false,
     val breeds: List<UiBreedListItem> = emptyList()
 )

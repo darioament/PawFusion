@@ -47,26 +47,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun App() {
     TopAppBar()
     BreedsListScreen{ }
-    /*val state = UiBreedListItem(
-        id = "1",
-        type = "German Shephard",
-        description = "Brown and black stronk dog",
-        averageLifeSpan = 10
-    )
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ){
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxWidth().height(400.dp),
-        ){
-            BreedListItem(
-                state,
-                {}
-            )
-        }
-    }*/
 
 
 }

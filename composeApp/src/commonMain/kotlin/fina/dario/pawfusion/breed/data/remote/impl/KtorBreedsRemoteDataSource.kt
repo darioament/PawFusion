@@ -1,5 +1,6 @@
 package fina.dario.pawfusion.breed.data.remote.impl
 
+import co.touchlab.kermit.Logger
 import fina.dario.pawfusion.breed.data.remote.dto.BreedDetailResponse
 import fina.dario.pawfusion.breed.data.remote.dto.BreedsResponseDto
 import fina.dario.pawfusion.breed.domain.api.BreedsRemoteDataSource
@@ -14,8 +15,9 @@ private const val BASE_URL = "https://dogapi.dog/api/v2"
 class KtorBreedsRemoteDataSource(
     private val httpClient: HttpClient
 ): BreedsRemoteDataSource {
+    private val log = Logger.withTag("PawFusionLogger")
     override suspend fun getListOfBreeds(): Result<BreedsResponseDto, DataError.Remote> {
-
+        log.i("KtorBreedsRemoteDataSource.getListOfBreeds called")
         return safeCall {
             httpClient.get("$BASE_URL/breeds")
         }
