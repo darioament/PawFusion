@@ -35,7 +35,7 @@ class BreedsListViewModel(
                 setLoadingPhase()
                 getAllBreeds()
                 setLoadingPhaseDone()
-            }
+            } // napraviti preko init-a
         }
     }.stateIn(
         scope = viewModelScope,
