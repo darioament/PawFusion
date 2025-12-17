@@ -5,10 +5,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -45,6 +50,32 @@ class SettingsScreen: Screen {
                             titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         ),
                     )
+                },
+                bottomBar = {
+
+                    NavigationBar(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    ) {
+                        NavigationBarItem(
+                            selected = false,
+                            onClick = { navigator?.push(HomeScreen())  },
+                            label = { Text("Home") },
+                            icon = { Icon(imageVector = Icons.Filled.Home, contentDescription = null)},
+                        )
+                        NavigationBarItem(
+                            selected = false,
+                            onClick = {  },
+                            label = { Text("Favorites") },
+                            icon = { Icon(imageVector = Icons.Filled.Star, contentDescription = null)},
+                        )
+                        NavigationBarItem(
+                            selected = true,
+                            onClick = {  },
+                            label = { Text("Settings") },
+                            icon = { Icon(imageVector = Icons.Filled.Settings, contentDescription = null)},
+                        )
+                    }
                 }
             ) { innerPadding ->
                 Box(

@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BreedDetailResponse(
-    val data: BreedResponseDto
+    val data: BreedItemDto
 )
 
 @Serializable

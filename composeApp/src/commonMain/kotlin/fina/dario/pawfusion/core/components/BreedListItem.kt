@@ -44,7 +44,7 @@ fun BreedListItem(
                 .padding(2.dp),
             shape = RoundedCornerShape(8.dp),
             elevation = CardDefaults.cardElevation(1.dp),
-            onClick = {}
+            onClick = {onBreedClicked(breed.id)}
         ){
             Box(
                 modifier = Modifier
@@ -80,5 +80,4 @@ fun BreedListItem(
     }
 }
 
-// Mattermost
 

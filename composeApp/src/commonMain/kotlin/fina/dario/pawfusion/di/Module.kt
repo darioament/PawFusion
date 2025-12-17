@@ -33,7 +33,7 @@ val sharedModule = module {
     single<HttpClient> { HttpClientFactory.create(get()) }
     //coin list
 
-    viewModel{ BreedsListViewModel(get()) }
+    viewModel{ BreedsListViewModel(get(), get()) }
     singleOf(::GetBreedsListUseCase)
     singleOf(::KtorBreedsRemoteDataSource).bind<BreedsRemoteDataSource>()
     singleOf(::GetBreedDetailsUseCase)

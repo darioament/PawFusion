@@ -9,6 +9,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import cafe.adriel.voyager.transitions.SlideTransition
+import fina.dario.pawfusion.breed.presentation.DetailScreenView
 import fina.dario.pawfusion.core.theme.BreedRoutineTheme
 import fina.dario.pawfusion.voyager.HomeScreen
 import fina.dario.pawfusion.voyager.tab.favorites.FavoritesTab
@@ -26,7 +27,6 @@ val myTabs = listOf(
 fun App() {
     Navigator(HomeScreen()) { navigator ->
         SlideTransition(navigator)
-
     }
 }
 
