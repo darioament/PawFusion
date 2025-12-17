@@ -84,7 +84,7 @@ class HomeScreen: Screen {
                         contentAlignment = Alignment.Center
                     ){
                         BreedsListScreen(navigator, onBreedClicked = {itemId->
-                            navigator?.push(DetailScreen(id = itemId, onNavigateBack = navigator.pop()))
+                            navigator?.push(DetailScreen(id = itemId))
                         })
                     }
                 }
