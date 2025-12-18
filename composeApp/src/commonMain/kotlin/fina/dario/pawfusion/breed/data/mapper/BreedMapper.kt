@@ -1,6 +1,5 @@
 package fina.dario.pawfusion.breed.data.mapper
 
-import co.touchlab.kermit.Logger
 import fina.dario.pawfusion.breed.data.remote.dto.BreedItemDto
 import fina.dario.pawfusion.breed.data.remote.dto.BreedLifeDto
 import fina.dario.pawfusion.breed.data.remote.dto.BreedWeightDto
@@ -20,8 +19,8 @@ fun BreedItemDto.toBreedModel() = BreedModel(
             description = attributes.description,
             hypoallergenic = attributes.hypoallergenic,
             life = attributes.life.toBreedLife(),
-            male_life = attributes.male_weight.toBreedWeight(),
-            female_life = attributes.female_weight.toBreedWeight()
+            male_weight = attributes.male_weight.toBreedWeight(),
+            female_weight = attributes.female_weight.toBreedWeight()
         ),
     )
 )

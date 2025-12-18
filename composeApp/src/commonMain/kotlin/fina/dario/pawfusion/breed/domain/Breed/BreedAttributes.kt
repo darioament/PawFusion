@@ -5,6 +5,6 @@ data class BreedAttributes(
     val description: String,
     val hypoallergenic: Boolean,
     val life: BreedLife,
-    val male_life: BreedWeight,
-    val female_life: BreedWeight
+    val male_weight: BreedWeight,
+    val female_weight: BreedWeight
 )

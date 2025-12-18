@@ -17,11 +17,6 @@ import fina.dario.pawfusion.voyager.tab.home.HomeTab
 import fina.dario.pawfusion.voyager.tab.settings.SettingsTab
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-val myTabs = listOf(
-    HomeTab,
-    FavoritesTab,
-    SettingsTab
-)
 @Composable
 @Preview
 fun App() {

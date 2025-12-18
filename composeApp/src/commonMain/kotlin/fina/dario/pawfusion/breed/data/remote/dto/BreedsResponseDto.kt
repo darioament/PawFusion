@@ -24,7 +24,7 @@ data class BreedAttributesDto(
     val male_weight: BreedWeightDto,
     val female_weight: BreedWeightDto,
 
-)
+    )
 @Serializable
 data class BreedLifeDto(
     val max: Int,

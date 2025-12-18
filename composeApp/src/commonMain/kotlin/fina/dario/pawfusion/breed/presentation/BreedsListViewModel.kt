@@ -1,14 +1,11 @@
 package fina.dario.pawfusion.breed.presentation
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import fina.dario.pawfusion.breed.domain.Breed.BreedFavorites
 import fina.dario.pawfusion.breed.domain.GetBreedsListUseCase
 import fina.dario.pawfusion.breed.domain.GetBreedDetailsUseCase
-import fina.dario.pawfusion.breed.domain.model.BreedModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onStart
 import fina.dario.pawfusion.core.domain.Result
@@ -30,6 +27,11 @@ class BreedsListViewModel(
 
     private val _state = MutableStateFlow(BreedsState())
     private val log = Logger.withTag("PawFusionLogger")
+    private val _selectedBreed = MutableStateFlow(makeEmptyBreed())
+
+    val selectedBreed = _selectedBreed.asStateFlow()
+
+    val _favorites = MutableStateFlow(BreedFavorites())
     val state = _state.asStateFlow().onStart {
         CoroutineScope(Dispatchers.IO).launch {
             launch{
@@ -60,6 +62,11 @@ class BreedsListViewModel(
             )
         }
     }
+    fun loadBreedById(id: String){
+
+    }
+
+
 
     private suspend fun getAllBreeds(){
         when(val breedsResponse = getBreedsListUseCase.execute()){
@@ -72,7 +79,17 @@ class BreedsListViewModel(
                                 id = breedItem.breed.id,
                                 type = breedItem.breed.attributes.name,
                                 description = breedItem.breed.attributes.description,
-                                averageLifeSpan = calculateAverageLifeSpan(breedItem.breed.attributes.life.min, breedItem.breed.attributes.life.max)
+                                averageLifeSpan = calculateAverageLifeSpan(breedItem.breed.attributes.life.min, breedItem.breed.attributes.life.max),
+                                hypoallergenic = breedItem.breed.attributes.hypoallergenic,
+                                male_weight = UiBreedWeight(
+                                    min = breedItem.breed.attributes.male_weight.min,
+                                    max = breedItem.breed.attributes.male_weight.max,
+                                ),
+                                female_weight = UiBreedWeight(
+                                    min = breedItem.breed.attributes.female_weight.min,
+                                    max = breedItem.breed.attributes.female_weight.max,
+                                ),
+                                isFavorite = false,
                             )
                         },
                     )
@@ -90,45 +107,96 @@ class BreedsListViewModel(
             }
         }
     }
-     fun getBreedById(id: String){
-         CoroutineScope(Dispatchers.IO).launch {
-             when (val breedResponse = getBreedDetailUseCase.execute(id)) {
-                 is Result.Success -> {
-                     log.i("Result of catching breedID success")
-                     _state.update {
-                         it.copy(
-                             selectedBreed = UiBreedListItem(
-                                 id = breedResponse.data.breed.id,
-                                 type = breedResponse.data.breed.attributes.name,
-                                 description = breedResponse.data.breed.attributes.description,
-                                 averageLifeSpan = calculateAverageLifeSpan(
-                                     breedResponse.data.breed.attributes.life.min,
-                                     breedResponse.data.breed.attributes.life.max
-                                 )
-                             )
-                         )
-                     }
 
-                     log.i("Result is breed_name: ${_state.value.selectedBreed?.type}")
-                 }
+    suspend fun getBreedById(id: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            when (val breedResponse = getBreedDetailUseCase.execute(id)) {
+                is Result.Success -> {
+                    log.i("Result of catching breedID success in getBreedId2")
+                            _selectedBreed.update {
+                                it.copy(
+                                    id = breedResponse.data.breed.id,
+                                    type = breedResponse.data.breed.attributes.name,
+                                    description = breedResponse.data.breed.attributes.description,
+                                    averageLifeSpan = calculateAverageLifeSpan(breedResponse.data.breed.attributes.life.min, breedResponse.data.breed.attributes.life.max),
+                                    hypoallergenic = breedResponse.data.breed.attributes.hypoallergenic,
+                                    male_weight = UiBreedWeight(
+                                        min = breedResponse.data.breed.attributes.male_weight.min,
+                                        max = breedResponse.data.breed.attributes.male_weight.max,
+                                    ),
+                                    female_weight = UiBreedWeight(
+                                        min = breedResponse.data.breed.attributes.female_weight.min,
+                                        max = breedResponse.data.breed.attributes.female_weight.max,
+                                    ),
+                                    isFavorite = true // ovo je problem kod favorite-a
+                                )
+                            }
+                    log.i("Breed in coruoutine scope ${_selectedBreed.value.isFavorite}")
 
-                 is Result.Error -> {
-                     log.i("Result is error in getBreedID")
+                }
+                is Result.Error -> {
+                    log.i("Result is error in getBreedID2")
+                }
 
-                     UiBreedListItem(
-                         id = "",
-                         type = "Error",
-                         description = "Failed to load breed",
-                         averageLifeSpan = 0
-                     )
-                 }
-             }
-         }
-
+            }
+        }
+        log.i("breed in getBreedId2 ${_selectedBreed.value.type}")
     }
 
+    fun toggleFavorite(){
+        _selectedBreed.update {
+            it.copy(
+                isFavorite = !it.isFavorite
+            )
+        }
+        if(_selectedBreed.value.isFavorite){
+            log.d("Breed is favorite")
+            _favorites.update {
+                it.copy(
+                    breeds = it.breeds + _selectedBreed.value
+                )
+            }
+        }
+        log.d("Currently in favorites: ${_favorites.value.breeds.size}")
+        updateStateWhenToggled(_selectedBreed.value.id)
+        log.d("Breed type: ${ _selectedBreed.value.type} isFavorite: ${_state.value.breeds.find { it.id == _selectedBreed.value.id }?.isFavorite}")
+    }
+    private fun updateStateWhenToggled(id: String) {
+        _state.update { currentState ->
+            val updatedBreeds = currentState.breeds.map { breed ->
+                if (breed.id == id) {
+                    breed.copy(isFavorite = !breed.isFavorite)
+                } else {
+                    breed
+                }
+            }
+            // 2. Kreiranje novog stanja sa ažuriranom listi -> provjereno u logcat-u (RADI). Ne display-a dobro jer vuce podatke s api-a i onda su automatski false
+            currentState.copy(breeds = updatedBreeds)
+        }
+    }
 
-
+    private fun makeEmptyBreed(): UiBreedListItem{
+        return UiBreedListItem(
+            id = "",
+            type = "Empty",
+            description = "Failed to load breed",
+            averageLifeSpan = 0,
+            hypoallergenic = false,
+            male_weight = UiBreedWeight(
+                min = 0,
+                max = 0,
+            ),
+            female_weight = UiBreedWeight(
+                min = 0,
+                max = 0,
+            ),
+            isFavorite = false,
+        )
+    }
+    private fun isInFavorites(id: String): Boolean {
+        log.d("Checking favorite: ${_favorites.value.breeds.size}")
+        return _favorites.value.breeds.any { it.id == id }
+    }
 
     private fun calculateAverageLifeSpan(min: Int, max: Int) = (min + max) / 2
 

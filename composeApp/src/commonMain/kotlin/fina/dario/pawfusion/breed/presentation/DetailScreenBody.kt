@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -26,13 +27,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import fina.dario.pawfusion.core.components.RoundendIcon
 import fina.dario.pawfusion.core.theme.BreedRoutineTheme
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
@@ -40,6 +47,10 @@ fun DetailScreenBody(
     breed: UiBreedListItem,
     onNavigateBack: () -> Unit,
 ) {
+    val breedListViewModel = koinViewModel<BreedsListViewModel>()
+    val state by breedListViewModel.state.collectAsStateWithLifecycle()
+
+
     BreedRoutineTheme {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -49,7 +60,7 @@ fun DetailScreenBody(
             ){
                 IconButton(onClick = onNavigateBack ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
                         contentDescription = "Localized description",
                         tint = Color.Gray
                     )
@@ -68,11 +79,11 @@ fun DetailScreenBody(
                             .background(color = MaterialTheme.colorScheme.outlineVariant, shape = RoundedCornerShape(12.dp)),
                         contentAlignment = Alignment.Center
                     ) {
-                        IconButton(onClick = { }  ) {
+                        IconButton(onClick =  { breedListViewModel.toggleFavorite() } ) {
                             Icon(
                                 imageVector = Icons.Filled.Favorite,
                                 contentDescription = "Localized description",
-                                tint = Color.Gray
+                                tint =  if(breed.isFavorite) Color.Gray else Color.White
                             )
                         }
                     }
@@ -88,7 +99,7 @@ fun DetailScreenBody(
                     modifier = Modifier.padding(20.dp)
                 ) {
                     Text(
-                        text = breed.type,
+                        text = breed?.type ?: "Empty",
                         fontSize = MaterialTheme.typography.titleMedium.fontSize,
                         fontWeight = MaterialTheme.typography.titleMedium.fontWeight,
                         color = Color.Black
@@ -118,19 +129,24 @@ fun DetailScreenBody(
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 AttributeCard(
-                                    title = "Breed",
-                                    subtitle = breed.type
+                                    title = "Male Weight",
+                                    subtitle = breed?.male_weight?.max.toString()
                                 )
-                                Spacer( modifier = Modifier.width(30.dp))
+                                Spacer( modifier = Modifier.width(15.dp))
                                 AttributeCard(
-                                    title = "Life span",
-                                    subtitle = breed.averageLifeSpan.toString()
+                                    title = "Female Weight",
+                                    subtitle = breed?.female_weight?.max.toString()
+                                )
+                                Spacer( modifier = Modifier.width(15.dp))
+                                AttributeCard(
+                                    title = "Life Span",
+                                    subtitle = breed?.averageLifeSpan.toString()
                                 )
                             }
                         }
                         Spacer(modifier = Modifier.height(30.dp))
                         Text(
-                            text = breed.description,
+                            text = breed?.description ?: "Nothing",
                             fontSize = MaterialTheme.typography.titleSmall.fontSize,
                             color = Color.Gray,
                             textAlign = TextAlign.Start
@@ -152,8 +168,8 @@ fun AttributeCard(
 ){
     Card(
         modifier = Modifier
-            .height(75.dp)
-            .width(125.dp)
+            .height(70.dp)
+            .width(110.dp)
             .background(color = Color.White, shape = RoundedCornerShape(12.dp)),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(1.dp)
@@ -169,7 +185,8 @@ fun AttributeCard(
             ){
                 Text(
                     text = title,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    fontSize = MaterialTheme.typography.titleSmall.fontSize,
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
