@@ -34,7 +34,7 @@ fun BreedListItem(
     onBreedClicked: (String) -> Unit
 ){
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(vertical = 7.dp),
         contentAlignment = Alignment.Center
     ){
         Card(
@@ -50,7 +50,7 @@ fun BreedListItem(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(8.dp))
-                    .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+                    .background(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), shape = RoundedCornerShape(8.dp))
                     .padding(10.dp),
                 contentAlignment = Alignment.Center
             ) {

@@ -25,6 +25,7 @@ fun BreedsListScreen(
 
     val breedListViewModel = koinViewModel<BreedsListViewModel>()
     val state by breedListViewModel.state.collectAsStateWithLifecycle()
+
     Box (
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

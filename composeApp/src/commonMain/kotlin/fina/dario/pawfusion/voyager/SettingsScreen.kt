@@ -14,6 +14,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -22,6 +23,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import fina.dario.pawfusion.core.theme.BreedRoutineTheme
@@ -59,21 +61,48 @@ class SettingsScreen: Screen {
                     ) {
                         NavigationBarItem(
                             selected = false,
-                            onClick = { navigator?.push(HomeScreen())  },
+                            onClick = { navigator?.pop()    },
                             label = { Text("Home") },
                             icon = { Icon(imageVector = Icons.Filled.Home, contentDescription = null)},
+                            colors = NavigationBarItemColors(
+                                selectedIconColor = Color.Black.copy(alpha = 0.7f),
+                                selectedTextColor = Color.Black.copy(alpha = 0.7f),
+                                selectedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+                                unselectedIconColor = Color.Black.copy(alpha = 0.7f),
+                                unselectedTextColor = Color.Black.copy(alpha = 0.7f),
+                                disabledIconColor = MaterialTheme.colorScheme.outlineVariant,
+                                disabledTextColor = MaterialTheme.colorScheme.outlineVariant
+                            ),
                         )
                         NavigationBarItem(
                             selected = false,
                             onClick = {  },
                             label = { Text("Favorites") },
                             icon = { Icon(imageVector = Icons.Filled.Star, contentDescription = null)},
+                            colors = NavigationBarItemColors(
+                                selectedIconColor = Color.Black.copy(alpha = 0.7f),
+                                selectedTextColor = Color.Black.copy(alpha = 0.7f),
+                                selectedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+                                unselectedIconColor = Color.Black.copy(alpha = 0.7f),
+                                unselectedTextColor = Color.Black.copy(alpha = 0.7f),
+                                disabledIconColor = MaterialTheme.colorScheme.outlineVariant,
+                                disabledTextColor = MaterialTheme.colorScheme.outlineVariant
+                            ),
                         )
                         NavigationBarItem(
                             selected = true,
                             onClick = {  },
                             label = { Text("Settings") },
                             icon = { Icon(imageVector = Icons.Filled.Settings, contentDescription = null)},
+                            colors = NavigationBarItemColors(
+                                selectedIconColor = Color.Black,
+                                selectedTextColor = Color.Black,
+                                selectedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
+                                unselectedIconColor = Color.Black,
+                                unselectedTextColor = Color.Black,
+                                disabledIconColor = MaterialTheme.colorScheme.outlineVariant,
+                                disabledTextColor = MaterialTheme.colorScheme.outlineVariant
+                            ),
                         )
                     }
                 }
