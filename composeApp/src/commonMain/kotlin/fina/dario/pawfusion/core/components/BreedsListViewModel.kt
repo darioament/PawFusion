@@ -32,6 +32,8 @@ class BreedsListViewModel(
     val selectedBreed = _selectedBreed.asStateFlow()
 
     val _favorites = MutableStateFlow(BreedFavorites())
+    val favorites = _favorites.asStateFlow()
+
     val state = _state.asStateFlow().onStart {
         CoroutineScope(Dispatchers.IO).launch {
             launch{
@@ -69,6 +71,7 @@ class BreedsListViewModel(
 
 
     private suspend fun getAllBreeds(){
+        log.d("Breed in getAllBreeds before update in favorite list has: ${_favorites.value.breeds.size}")
         when(val breedsResponse = getBreedsListUseCase.execute()){
             is Result.Success -> {
                 log.i("Result is success")
@@ -89,11 +92,12 @@ class BreedsListViewModel(
                                     min = breedItem.breed.attributes.female_weight.min,
                                     max = breedItem.breed.attributes.female_weight.max,
                                 ),
-                                isFavorite = false,
+                                isFavorite = if(isInFavorites(id = breedItem.breed.id)) true else false // ovo je problem kod favorite-a
                             )
                         },
                     )
                 }
+                log.i("Breed in favorite scope ${favorites.value.breeds.size}")
             }
             is Result.Error -> {
                 log.i("Result is error in getBreedList")
@@ -128,10 +132,10 @@ class BreedsListViewModel(
                                         min = breedResponse.data.breed.attributes.female_weight.min,
                                         max = breedResponse.data.breed.attributes.female_weight.max,
                                     ),
-                                    isFavorite = true // ovo je problem kod favorite-a
+                                    isFavorite = _selectedBreed.value.isFavorite // ovo je problem kod favorite-a
                                 )
                             }
-                    log.i("Breed in coruoutine scope ${_selectedBreed.value.isFavorite}")
+
 
                 }
                 is Result.Error -> {
@@ -146,18 +150,21 @@ class BreedsListViewModel(
     fun toggleFavorite(){
         _selectedBreed.update {
             it.copy(
-                isFavorite = !it.isFavorite
+                isFavorite = !_selectedBreed.value.isFavorite
             )
         }
         if(_selectedBreed.value.isFavorite){
             log.d("Breed is favorite")
-            _favorites.update {
+            _favorites.update{
                 it.copy(
                     breeds = it.breeds + _selectedBreed.value
                 )
             }
+            log.d("Breed in toggle in favorite list has: ${_favorites.value.breeds.size}")
         }
-        log.d("Currently in favorites: ${_favorites.value.breeds.size}")
+        else{
+            log.d("Breed is not favorite")
+        }
         updateStateWhenToggled(_selectedBreed.value.id)
         log.d("Breed type: ${ _selectedBreed.value.type} isFavorite: ${_state.value.breeds.find { it.id == _selectedBreed.value.id }?.isFavorite}")
     }
@@ -173,9 +180,10 @@ class BreedsListViewModel(
             // 2. Kreiranje novog stanja sa ažuriranom listi -> provjereno u logcat-u (RADI). Ne display-a dobro jer vuce podatke s api-a i onda su automatski false
             currentState.copy(breeds = updatedBreeds)
         }
+        log.d("Currently in favorites: ${_favorites.value.breeds.size}")
     }
 
-    private fun makeEmptyBreed(): UiBreedListItem{
+    private fun makeEmptyBreed(): UiBreedListItem{  // -> ovo je potrebno zamijeniti kad se stvara. Dakle potrebno je provjeriti je li zapravo navedeni item favorite
         return UiBreedListItem(
             id = "",
             type = "Empty",

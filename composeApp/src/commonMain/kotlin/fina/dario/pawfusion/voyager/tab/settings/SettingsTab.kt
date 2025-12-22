@@ -29,7 +29,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import fina.dario.pawfusion.core.theme.BreedRoutineTheme
-import fina.dario.pawfusion.voyager.FavoritesScreen
+
 
 object SettingsTab : Tab {
     @OptIn(ExperimentalMaterial3Api::class)
