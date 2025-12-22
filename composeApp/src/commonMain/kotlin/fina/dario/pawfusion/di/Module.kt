@@ -5,8 +5,8 @@ import fina.dario.pawfusion.breed.data.remote.impl.KtorBreedsRemoteDataSource
 import fina.dario.pawfusion.breed.domain.GetBreedDetailsUseCase
 import fina.dario.pawfusion.breed.domain.GetBreedsListUseCase
 import fina.dario.pawfusion.breed.domain.api.BreedsRemoteDataSource
-import fina.dario.pawfusion.breed.presentation.BreedFavoritesViewModel
-import fina.dario.pawfusion.breed.presentation.BreedsListViewModel
+import fina.dario.pawfusion.core.components.BreedFavoritesViewModel
+import fina.dario.pawfusion.core.components.BreedsListViewModel
 import fina.dario.pawfusion.core.database.favoriteBreed.FavoriteBreedDatabase
 import fina.dario.pawfusion.core.database.favoriteBreed.getFavoriteBreedDatabase
 import fina.dario.pawfusion.core.network.HttpClientFactory

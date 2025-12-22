@@ -1,4 +1,4 @@
-package fina.dario.pawfusion.breed.presentation
+package fina.dario.pawfusion.core.components
 
 import androidx.lifecycle.ViewModel
 import fina.dario.pawfusion.breed.domain.Breed.BreedFavorites

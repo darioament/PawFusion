@@ -8,14 +8,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import cafe.adriel.voyager.transitions.SlideTransition
-import fina.dario.pawfusion.breed.presentation.DetailScreenView
 import fina.dario.pawfusion.core.theme.BreedRoutineTheme
-import fina.dario.pawfusion.voyager.HomeScreen
 import fina.dario.pawfusion.voyager.tab.favorites.FavoritesTab
 import fina.dario.pawfusion.voyager.tab.home.HomeTab
 import fina.dario.pawfusion.voyager.tab.settings.SettingsTab

@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import fina.dario.pawfusion.breed.presentation.BreedsState
 
 @Composable
 fun BreedsListComponent(

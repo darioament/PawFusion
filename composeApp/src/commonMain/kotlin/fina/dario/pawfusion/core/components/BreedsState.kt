@@ -1,4 +1,4 @@
-package fina.dario.pawfusion.breed.presentation
+package fina.dario.pawfusion.core.components
 
 import androidx.compose.runtime.Stable
 import org.jetbrains.compose.resources.StringResource

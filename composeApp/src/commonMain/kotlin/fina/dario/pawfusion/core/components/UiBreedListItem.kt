@@ -1,7 +1,4 @@
-package fina.dario.pawfusion.breed.presentation
-
-import fina.dario.pawfusion.breed.domain.Breed.BreedAttributes
-import fina.dario.pawfusion.breed.domain.Breed.BreedLife
+package fina.dario.pawfusion.core.components
 
 data class UiBreedListItem(
     val id: String,
