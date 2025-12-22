@@ -20,13 +20,14 @@ koin= "4.1.1"
 ksp = "2.0.20-1.0.24"
 kotlinx-serialization = "1.9.0"
 kotlin-date-time = "0.7.1"
-room = "2.7.0-alpha11"
-sqlite = "2.5.0-SNAPSHOT"
+room = "2.8.4"
+sqlite = "2.6.2"
 kermit = "2.0.4"
 kotlinStdlib = "2.1.0"
 runner = "1.7.0"
 core = "1.7.0"
 voyager = "1.1.0-beta03"
+
 
 
 [libraries]
@@ -51,6 +52,7 @@ voyager-bottomSheetNavigator = { module = "cafe.adriel.voyager:voyager-bottom-sh
 voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
+
 
 
 
@@ -81,9 +83,9 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 
 # Room Libraries
-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }

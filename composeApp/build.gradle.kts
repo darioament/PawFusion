@@ -57,7 +57,11 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.kotlin.date.time)
             implementation(libs.androidx.lifecycle.viewmodel)
-            //potrebno je ubaciti dependency za room i/ili sqlLite
+
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqlite.bundled)
+           // implementation(libs.androidx.sqlite)
+
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.bundles.ktor)
 
