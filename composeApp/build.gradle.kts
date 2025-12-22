@@ -9,6 +9,8 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
+
+
 }
 
 kotlin {

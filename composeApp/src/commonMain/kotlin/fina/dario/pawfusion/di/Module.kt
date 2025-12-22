@@ -1,11 +1,14 @@
 package fina.dario.pawfusion.di
 
+import androidx.room.RoomDatabase
 import fina.dario.pawfusion.breed.data.remote.impl.KtorBreedsRemoteDataSource
 import fina.dario.pawfusion.breed.domain.GetBreedDetailsUseCase
 import fina.dario.pawfusion.breed.domain.GetBreedsListUseCase
 import fina.dario.pawfusion.breed.domain.api.BreedsRemoteDataSource
 import fina.dario.pawfusion.breed.presentation.BreedFavoritesViewModel
 import fina.dario.pawfusion.breed.presentation.BreedsListViewModel
+import fina.dario.pawfusion.core.database.favoriteBreed.FavoriteBreedDatabase
+import fina.dario.pawfusion.core.database.favoriteBreed.getFavoriteBreedDatabase
 import fina.dario.pawfusion.core.network.HttpClientFactory
 import io.ktor.client.HttpClient
 import org.koin.core.context.startKoin
@@ -32,8 +35,12 @@ expect val platformModule: Module
 val sharedModule = module {
     //core
     single<HttpClient> { HttpClientFactory.create(get()) }
-    //coin list
 
+    //favorite
+    single{
+        getFavoriteBreedDatabase(get<RoomDatabase.Builder<FavoriteBreedDatabase>>())
+    }
+    //breed list
     viewModel{ BreedsListViewModel(get(), get()) }
     viewModel { BreedFavoritesViewModel() }
     singleOf(::GetBreedsListUseCase)

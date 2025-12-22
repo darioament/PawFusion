@@ -54,7 +54,7 @@ fun TopAppBar(navigator: Navigator?, scrollBehavior: TopAppBarScrollBehavior) {
         },
         scrollBehavior = scrollBehavior,
         navigationIcon = {
-            IconButton(onClick = { navigator?.push(SettingsScreen()) }) {
+            IconButton(onClick = { /*navigator?.push(SettingsScreen())*/ }) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "Localized description"

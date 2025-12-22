@@ -57,59 +57,7 @@ class HomeScreen: Screen {
                     topBar = {
                         TopAppBar(navigator, scrollBehavior)
                     },
-                    bottomBar = {
 
-                        NavigationBar(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        ) {
-                                NavigationBarItem(
-                                    selected = true,
-                                    onClick = { },
-                                    label = { Text("Home") },
-                                    icon = { Icon(imageVector = Icons.Filled.Home, contentDescription = null)},
-                                    colors = NavigationBarItemColors(
-                                        selectedIconColor = Color.Black.copy(alpha = 0.7f),
-                                        selectedTextColor = Color.Black.copy(alpha = 0.7f),
-                                        selectedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
-                                        unselectedIconColor = Color.Black.copy(alpha = 0.7f),
-                                        unselectedTextColor = Color.Black.copy(alpha = 0.7f),
-                                        disabledIconColor = MaterialTheme.colorScheme.outlineVariant,
-                                        disabledTextColor = MaterialTheme.colorScheme.outlineVariant
-                                    ),
-                                    )
-                                NavigationBarItem(
-                                    selected = false,
-                                    onClick = {  },
-                                    label = { Text("Favorites") },
-                                    icon = { Icon(imageVector = Icons.Filled.Star, contentDescription = null)},
-                                    colors = NavigationBarItemColors(
-                                        selectedIconColor = Color.Black.copy(alpha = 0.7f),
-                                        selectedTextColor = Color.Black.copy(alpha = 0.7f),
-                                        selectedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
-                                        unselectedIconColor = Color.Black.copy(alpha = 0.7f),
-                                        unselectedTextColor = Color.Black.copy(alpha = 0.7f),
-                                        disabledIconColor = MaterialTheme.colorScheme.outlineVariant,
-                                        disabledTextColor = MaterialTheme.colorScheme.outlineVariant
-                                    ),
-                                )
-                                NavigationBarItem(
-                                    selected = false,
-                                    onClick = { navigator?.push(SettingsScreen())  },
-                                    label = { Text("Settings") },
-                                    icon = { Icon(imageVector = Icons.Filled.Settings, contentDescription = null)},
-                                    colors = NavigationBarItemColors(
-                                        selectedIconColor = Color.Black.copy(alpha = 0.7f),
-                                        selectedTextColor = Color.Black.copy(alpha = 0.7f),
-                                        selectedIndicatorColor = MaterialTheme.colorScheme.outlineVariant,
-                                        unselectedIconColor = Color.Black.copy(alpha = 0.7f),
-                                        unselectedTextColor = Color.Black.copy(alpha = 0.7f),
-                                        disabledIconColor = MaterialTheme.colorScheme.outlineVariant,
-                                        disabledTextColor = MaterialTheme.colorScheme.outlineVariant
-                                    ),
-                                )
-                        }
-                    }
 
                     ) { innerPadding ->
                     Spacer(modifier = Modifier.height(15.dp))
