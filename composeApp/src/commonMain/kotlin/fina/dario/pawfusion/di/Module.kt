@@ -41,7 +41,7 @@ val sharedModule = module {
         getFavoriteBreedDatabase(get<RoomDatabase.Builder<FavoriteBreedDatabase>>())
     }
     //breed list
-    viewModel{ BreedsListViewModel(get(), get()) }
+    singleOf(::BreedsListViewModel)
     viewModel { BreedFavoritesViewModel() }
     singleOf(::GetBreedsListUseCase)
     singleOf(::KtorBreedsRemoteDataSource).bind<BreedsRemoteDataSource>()

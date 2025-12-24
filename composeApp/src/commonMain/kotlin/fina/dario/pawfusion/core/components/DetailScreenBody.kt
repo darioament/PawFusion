@@ -24,6 +24,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,7 +42,7 @@ fun DetailScreenBody(
     onNavigateBack: () -> Unit,
 ) {
     val breedListViewModel = koinViewModel<BreedsListViewModel>()
-    val state by breedListViewModel.state.collectAsStateWithLifecycle()
+    val state by breedListViewModel.state.collectAsState()
 
 
     BreedRoutineTheme {

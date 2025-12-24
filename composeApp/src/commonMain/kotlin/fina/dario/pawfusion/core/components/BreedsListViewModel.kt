@@ -132,7 +132,7 @@ class BreedsListViewModel(
                                         min = breedResponse.data.breed.attributes.female_weight.min,
                                         max = breedResponse.data.breed.attributes.female_weight.max,
                                     ),
-                                    isFavorite = _selectedBreed.value.isFavorite // ovo je problem kod favorite-a
+                                    isFavorite = favorites.value.breeds.find{it.id == id}?.isFavorite == true // ovo je problem kod favorite-a
                                 )
                             }
 
