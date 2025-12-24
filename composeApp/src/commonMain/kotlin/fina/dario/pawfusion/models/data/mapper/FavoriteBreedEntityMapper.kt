@@ -10,3 +10,11 @@ fun FavoriteBreedEntity.toFavoriteBreedModel() = FavoriteBreedModel(
     averageLifeSpan = averageLifeSpan,
     hypoallergenic = hypoallergenic,
 )
+
+fun FavoriteBreedModel.toFavoriteBreedEntity() = FavoriteBreedEntity(
+    id = id,
+    type = type,
+    description = description,
+    averageLifeSpan = averageLifeSpan,
+    hypoallergenic = hypoallergenic,
+)
