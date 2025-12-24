@@ -1,7 +1,6 @@
-package fina.dario.pawfusion.favorites.data.local
+package fina.dario.pawfusion.models.dao
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity

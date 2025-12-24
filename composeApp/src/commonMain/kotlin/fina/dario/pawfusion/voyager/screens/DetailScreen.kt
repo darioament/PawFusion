@@ -1,4 +1,4 @@
-package fina.dario.pawfusion.voyager
+package fina.dario.pawfusion.voyager.screens
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable

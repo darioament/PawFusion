@@ -7,10 +7,10 @@ import io.ktor.http.Headers.Companion.build
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
-
+/*
 @Suppress("NO_ACTUAL_FOR_EXPECT")
 expect object FavoriteBreedDataBaseCreator: RoomDatabaseConstructor<FavoriteBreedDatabase>
-
+*/
 
 fun getFavoriteBreedDatabase(
     builder: RoomDatabase.Builder<FavoriteBreedDatabase>

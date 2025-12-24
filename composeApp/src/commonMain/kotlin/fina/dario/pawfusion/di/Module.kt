@@ -10,6 +10,8 @@ import fina.dario.pawfusion.core.components.BreedsListViewModel
 import fina.dario.pawfusion.core.database.favoriteBreed.FavoriteBreedDatabase
 import fina.dario.pawfusion.core.database.favoriteBreed.getFavoriteBreedDatabase
 import fina.dario.pawfusion.core.network.HttpClientFactory
+import fina.dario.pawfusion.resources.LocalDataSource
+import fina.dario.pawfusion.resources.LocalDataSourceImpl
 import io.ktor.client.HttpClient
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -36,12 +38,15 @@ val sharedModule = module {
     //core
     single<HttpClient> { HttpClientFactory.create(get()) }
 
-    //favorite
+    //Room database: Favorite
     single{
         getFavoriteBreedDatabase(get<RoomDatabase.Builder<FavoriteBreedDatabase>>())
     }
-    //breed list
+    //breedView model
     singleOf(::BreedsListViewModel)
+    // localDataSource
+    singleOf(::LocalDataSourceImpl).bind<LocalDataSource>()
+
     viewModel { BreedFavoritesViewModel() }
     singleOf(::GetBreedsListUseCase)
     singleOf(::KtorBreedsRemoteDataSource).bind<BreedsRemoteDataSource>()

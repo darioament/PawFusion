@@ -1,10 +1,9 @@
-package fina.dario.pawfusion.favorites.data.local
+package fina.dario.pawfusion.models.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
-
 
 @Dao
 interface FavoriteBreedDao {

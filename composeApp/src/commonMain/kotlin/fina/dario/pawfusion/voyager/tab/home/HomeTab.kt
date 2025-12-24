@@ -7,7 +7,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import cafe.adriel.voyager.transitions.SlideTransition
-import fina.dario.pawfusion.voyager.HomeScreen
+import fina.dario.pawfusion.voyager.screens.HomeScreen
 
 object HomeTab : Tab {
 

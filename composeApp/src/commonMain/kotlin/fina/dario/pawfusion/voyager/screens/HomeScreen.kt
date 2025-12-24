@@ -1,4 +1,4 @@
-package fina.dario.pawfusion.voyager
+package fina.dario.pawfusion.voyager.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -11,12 +11,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import fina.dario.pawfusion.core.components.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import fina.dario.pawfusion.core.components.BreedsListScreen
@@ -33,7 +33,7 @@ class HomeScreen: Screen {
     override fun Content() {
         val navigator = LocalNavigator.current
         val breedListViewModel = koinViewModel<BreedsListViewModel>()
-        val state by breedListViewModel.state.collectAsStateWithLifecycle()
+        val state by breedListViewModel.state.collectAsState()
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
         if(state.loading){
