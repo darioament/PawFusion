@@ -1,12 +1,12 @@
 package fina.dario.pawfusion.di
 
 import androidx.room.RoomDatabase
-import fina.dario.pawfusion.breed.data.remote.impl.KtorBreedsRemoteDataSource
-import fina.dario.pawfusion.breed.domain.GetBreedDetailsUseCase
-import fina.dario.pawfusion.breed.domain.GetBreedsListUseCase
-import fina.dario.pawfusion.breed.domain.api.BreedsRemoteDataSource
-import fina.dario.pawfusion.core.components.BreedFavoritesViewModel
-import fina.dario.pawfusion.core.components.BreedsListViewModel
+import fina.dario.pawfusion.models.remote.impl.KtorBreedsRemoteDataSource
+import fina.dario.pawfusion.models.domain.GetBreedDetailsUseCase
+import fina.dario.pawfusion.models.domain.GetBreedsListUseCase
+import fina.dario.pawfusion.models.domain.api.BreedsRemoteDataSource
+import fina.dario.pawfusion.core.BreedFavoritesViewModel
+import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.database.favoriteBreed.FavoriteBreedDatabase
 import fina.dario.pawfusion.core.database.favoriteBreed.getFavoriteBreedDatabase
 import fina.dario.pawfusion.core.network.HttpClientFactory

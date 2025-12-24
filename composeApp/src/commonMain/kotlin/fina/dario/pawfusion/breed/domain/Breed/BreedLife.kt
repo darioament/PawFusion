@@ -1,6 +1,0 @@
-package fina.dario.pawfusion.breed.domain.Breed
-
-data class BreedLife(
-    val min: Int,
-    val max: Int,
-)
