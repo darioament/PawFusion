@@ -18,10 +18,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import cafe.adriel.voyager.navigator.Navigator
+import fina.dario.pawfusion.core.BreedSearchViewModel
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(navigator: Navigator?, scrollBehavior: TopAppBarScrollBehavior) {
+    val breedSearchViewModel = koinInject<BreedSearchViewModel>()
+
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -54,7 +58,7 @@ fun TopAppBar(navigator: Navigator?, scrollBehavior: TopAppBarScrollBehavior) {
         },
         scrollBehavior = scrollBehavior,
         actions = {
-            IconButton(onClick = { /*navigator?.push(SettingsScreen())*/ }) {
+            IconButton(onClick = { breedSearchViewModel.setSearching() }) {
                 Icon(
                     imageVector = Icons.Filled.Search,
                     contentDescription = "Search icon"

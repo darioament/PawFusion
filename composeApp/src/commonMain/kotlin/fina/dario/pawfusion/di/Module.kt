@@ -6,6 +6,7 @@ import fina.dario.pawfusion.models.domain.GetBreedDetailsUseCase
 import fina.dario.pawfusion.models.domain.GetBreedsListUseCase
 import fina.dario.pawfusion.models.domain.api.BreedsRemoteDataSource
 import fina.dario.pawfusion.core.BreedFavoritesViewModel
+import fina.dario.pawfusion.core.BreedSearchViewModel
 import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.database.favoriteBreed.FavoriteBreedDatabase
 import fina.dario.pawfusion.core.database.favoriteBreed.getFavoriteBreedDatabase
@@ -54,6 +55,7 @@ val sharedModule = module {
     //breedView model
     singleOf(::BreedsListViewModel)
     singleOf(::BreedFavoritesViewModel)
+    singleOf(::BreedSearchViewModel)
     // Repo source
     singleOf(::LocalDataSourceImpl).bind<LocalDataSource>()
     singleOf(::RepositoryImpl).bind<Repository>()
