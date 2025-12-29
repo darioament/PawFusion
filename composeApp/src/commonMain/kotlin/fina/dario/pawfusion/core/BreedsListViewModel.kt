@@ -22,9 +22,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
-class BreedsListViewModel(
+internal class BreedsListViewModel(
     private val getBreedsListUseCase: GetBreedsListUseCase,
-    private val getBreedDetailUseCase: GetBreedDetailsUseCase
+    private val getBreedDetailUseCase: GetBreedDetailsUseCase,
+    private val breedFavoriteViewModel: BreedFavoritesViewModel
 ): ViewModel(){
 
     private val _state = MutableStateFlow(BreedsState())
@@ -33,8 +34,6 @@ class BreedsListViewModel(
 
     val selectedBreed = _selectedBreed.asStateFlow()
 
-    val _favorites = MutableStateFlow(BreedFavorites())
-    val favorites = _favorites.asStateFlow()
 
     val state = _state.asStateFlow().onStart {
         CoroutineScope(Dispatchers.IO).launch {
@@ -66,14 +65,8 @@ class BreedsListViewModel(
             )
         }
     }
-    fun loadBreedById(id: String){
-
-    }
-
-
 
     private suspend fun getAllBreeds(){
-        log.d("Breed in getAllBreeds before update in favorite list has: ${_favorites.value.breeds.size}")
         when(val breedsResponse = getBreedsListUseCase.execute()){
             is Result.Success -> {
                 log.i("Result is success")
@@ -97,12 +90,11 @@ class BreedsListViewModel(
                                     min = breedItem.breed.attributes.female_weight.min,
                                     max = breedItem.breed.attributes.female_weight.max,
                                 ),
-                                isFavorite = if (isInFavorites(id = breedItem.breed.id)) true else false // ovo je problem kod favorite-a
+                                isFavorite = isInFavorites(id = breedItem.breed.id) // ovo je problem kod favorite-a
                             )
                         },
                     )
                 }
-                log.i("Breed in favorite scope ${favorites.value.breeds.size}")
             }
             is Result.Error -> {
                 log.i("Result is error in getBreedList")
@@ -137,7 +129,7 @@ class BreedsListViewModel(
                                         min = breedResponse.data.breed.attributes.female_weight.min,
                                         max = breedResponse.data.breed.attributes.female_weight.max,
                                     ),
-                                    isFavorite = false // ovo je problem kod favorite-a
+                                    isFavorite = isInFavorites(breedResponse.data.breed.id)
                                 )
                             }
 
@@ -155,14 +147,18 @@ class BreedsListViewModel(
     fun toggleFavorite(){
         _selectedBreed.update {
             it.copy(
-                isFavorite = !_selectedBreed.value.isFavorite
-            )
+                isFavorite = !isInFavorites(_selectedBreed.value.id))
+        }
+        if (_selectedBreed.value.isFavorite){
+            breedFavoriteViewModel.insertFavoriteBreed(_selectedBreed.value)
+        }else{
+            breedFavoriteViewModel.deleteFromFavoriteBreeds(_selectedBreed.value)
         }
 
         updateStateWhenToggled(_selectedBreed.value.id)
-        log.d("Breed type: ${ _selectedBreed.value.type} isFavorite: ${_state.value.breeds.find { it.id == _selectedBreed.value.id }?.isFavorite}")
     }
     private fun updateStateWhenToggled(id: String) {
+        breedFavoriteViewModel.loadFavorites()
         _state.update { currentState ->
             val updatedBreeds = currentState.breeds.map { breed ->
                 if (breed.id == id) {
@@ -174,7 +170,6 @@ class BreedsListViewModel(
             // 2. Kreiranje novog stanja sa ažuriranom listi -> provjereno u logcat-u (RADI). Ne display-a dobro jer vuce podatke s api-a i onda su automatski false
             currentState.copy(breeds = updatedBreeds)
         }
-        log.d("Currently in favorites: ${_favorites.value.breeds.size}")
     }
 
     private fun makeEmptyBreed(): UiBreedListItem {  // -> ovo je potrebno zamijeniti kad se stvara. Dakle potrebno je provjeriti je li zapravo navedeni item favorite
@@ -196,8 +191,8 @@ class BreedsListViewModel(
         )
     }
     private fun isInFavorites(id: String): Boolean {
-        log.d("Checking favorite: ${_favorites.value.breeds.size}")
-        return _favorites.value.breeds.any { it.id == id }
+        log.d("Checking favorite: ${breedFavoriteViewModel.favorites.value.breeds.any { it.id == id }}")
+        return breedFavoriteViewModel.favorites.value.breeds.any { it.id == id }
     }
 
     private fun calculateAverageLifeSpan(min: Int, max: Int) = (min + max) / 2

@@ -30,7 +30,7 @@ import org.koin.compose.koinInject
 
 internal class BreedFavoritesViewModel(
     private val getAllFavoriteBreedsUseCase: GetAllFavoriteBreedsUseCase,
-    private val InsertFavoriteBreedUseCase: insertFavoriteBreedUseCase,
+    private val insertFavoriteBreedUseCase: insertFavoriteBreedUseCase,
     private val deleteFavoriteBreedUseCase: DeleteFavoriteBReedByIdUseCase,
 ): ViewModel() {
     private val _favorites = MutableStateFlow(BreedFavorites())
@@ -53,10 +53,19 @@ internal class BreedFavoritesViewModel(
     fun insertFavoriteBreed(breed: UiBreedListItem){
         log.d("Inserting favorite breed: ${breed.type}")
         CoroutineScope(Dispatchers.IO).launch {
-            InsertFavoriteBreedUseCase.insert(
+            insertFavoriteBreedUseCase.insert(
                 breed.toFavoriteBreedModel())
         }
     }
+
+
+    fun deleteFromFavoriteBreeds(breed : UiBreedListItem){
+        log.d("Deleting favorite breed: ${breed.type}")
+        CoroutineScope(Dispatchers.IO).launch{
+            deleteFavoriteBreedUseCase.deleteFavoriteBreedById(breed.id)
+        }
+    }
+
     private fun <T> Flow<List<T>>.toSingleList(): List<T> = runBlocking {
         this@toSingleList.first() // Suspends until the first list is emitted
     }

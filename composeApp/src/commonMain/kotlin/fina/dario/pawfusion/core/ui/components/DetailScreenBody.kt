@@ -83,8 +83,7 @@ fun DetailScreenBody(
                     ) {
                         IconButton(onClick =
                             {
-                                breedListViewModel.toggleFavorite();
-                                favoriteBreedViewModel.insertFavoriteBreed(breed)
+                                breedListViewModel.toggleFavorite()
                             }) {
                             Icon(
                                 imageVector = Icons.Filled.Favorite,
