@@ -6,20 +6,35 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import fina.dario.pawfusion.core.BreedFavoritesViewModel
+import fina.dario.pawfusion.models.data.FavoriteBreedModel
+import fina.dario.pawfusion.models.data.domain.usecase.GetAllFavoriteBreedsUseCase
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
 @Composable
 fun FavoritesScreenView(){
+    val scope = rememberCoroutineScope()
+    val breedFavoritesViewModel: BreedFavoritesViewModel = koinInject()
+    breedFavoritesViewModel.loadFavorites()
+    var favorites = emptyList<FavoriteBreedModel>()
+    favorites = breedFavoritesViewModel.favorites.value.breeds
+    // problem is in favorites are not empty list or there is a casting problem
+
     Box(modifier = Modifier.fillMaxSize()){
         Column(modifier = Modifier.fillMaxSize()){
             LazyColumn(modifier = Modifier.fillMaxSize()){
-                items(mockedFavoriteList){ item ->
+                items(items = favorites){ item ->
                     FavoritesBreedCard(item.type, item.averageLifeSpan)
+                    }
                 }
             }
         }
     }
-}
+
 
 val mockedFavoriteList = listOf(
     UiBreedListItem(

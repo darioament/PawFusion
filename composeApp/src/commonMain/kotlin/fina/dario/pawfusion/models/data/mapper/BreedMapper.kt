@@ -1,5 +1,8 @@
 package fina.dario.pawfusion.models.data.mapper
 
+import fina.dario.pawfusion.core.ui.components.UiBreedListItem
+import fina.dario.pawfusion.models.dao.FavoriteBreedEntity
+import fina.dario.pawfusion.models.data.FavoriteBreedModel
 import fina.dario.pawfusion.models.remote.dto.BreedItemDto
 import fina.dario.pawfusion.models.remote.dto.BreedLifeDto
 import fina.dario.pawfusion.models.remote.dto.BreedWeightDto
@@ -32,4 +35,12 @@ fun BreedLifeDto.toBreedLife() = BreedLife(
 fun BreedWeightDto.toBreedWeight() = BreedWeight(
     min = min,
     max = max,
+)
+
+fun UiBreedListItem.toFavoriteBreedModel() = FavoriteBreedModel(
+    id = id,
+    type = type,
+    description = description,
+    averageLifeSpan = averageLifeSpan,
+    hypoallergenic = hypoallergenic
 )

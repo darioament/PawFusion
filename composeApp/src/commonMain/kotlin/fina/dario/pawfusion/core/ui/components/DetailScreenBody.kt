@@ -26,13 +26,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import fina.dario.pawfusion.core.BreedFavoritesViewModel
 import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.ui.theme.BreedRoutineTheme
+import fina.dario.pawfusion.models.data.domain.usecase.insertFavoriteBreedUseCase
+import fina.dario.pawfusion.models.data.domain.usecase.insertFavoriteBreedUseCaseImpl
+import fina.dario.pawfusion.models.data.mapper.toFavoriteBreedModel
+import kotlinx.coroutines.launch
+import org.koin.compose.LocalKoinScope
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -43,8 +51,8 @@ fun DetailScreenBody(
 ) {
     val breedListViewModel = koinViewModel<BreedsListViewModel>()
     val state by breedListViewModel.state.collectAsState()
-
-
+    val favoriteBreedViewModel = koinViewModel<BreedFavoritesViewModel>()
+    val scope = rememberCoroutineScope()
     BreedRoutineTheme {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -73,7 +81,13 @@ fun DetailScreenBody(
                             .background(color = MaterialTheme.colorScheme.outlineVariant, shape = RoundedCornerShape(12.dp)),
                         contentAlignment = Alignment.Center
                     ) {
-                        IconButton(onClick =  { breedListViewModel.toggleFavorite() } ) {
+                        IconButton(onClick =
+                            {
+                                breedListViewModel.toggleFavorite();
+                                scope.launch{
+                                    favoriteBreedViewModel.insertFavoriteBreed(breed)
+                                }
+                            }) {
                             Icon(
                                 imageVector = Icons.Filled.Favorite,
                                 contentDescription = "Localized description",

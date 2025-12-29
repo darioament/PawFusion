@@ -137,7 +137,7 @@ class BreedsListViewModel(
                                         min = breedResponse.data.breed.attributes.female_weight.min,
                                         max = breedResponse.data.breed.attributes.female_weight.max,
                                     ),
-                                    isFavorite = favorites.value.breeds.find{it.id == id}?.isFavorite == true // ovo je problem kod favorite-a
+                                    isFavorite = false // ovo je problem kod favorite-a
                                 )
                             }
 
@@ -158,18 +158,7 @@ class BreedsListViewModel(
                 isFavorite = !_selectedBreed.value.isFavorite
             )
         }
-        if(_selectedBreed.value.isFavorite){
-            log.d("Breed is favorite")
-            _favorites.update{
-                it.copy(
-                    breeds = it.breeds + _selectedBreed.value
-                )
-            }
-            log.d("Breed in toggle in favorite list has: ${_favorites.value.breeds.size}")
-        }
-        else{
-            log.d("Breed is not favorite")
-        }
+
         updateStateWhenToggled(_selectedBreed.value.id)
         log.d("Breed type: ${ _selectedBreed.value.type} isFavorite: ${_state.value.breeds.find { it.id == _selectedBreed.value.id }?.isFavorite}")
     }

@@ -10,8 +10,15 @@ import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.database.favoriteBreed.FavoriteBreedDatabase
 import fina.dario.pawfusion.core.database.favoriteBreed.getFavoriteBreedDatabase
 import fina.dario.pawfusion.core.network.HttpClientFactory
+import fina.dario.pawfusion.models.data.domain.usecase.DeleteFavoriteBReedByIdUseCase
+import fina.dario.pawfusion.models.data.domain.usecase.DeleteFavoriteBReedByIdUseCaseImpl
+import fina.dario.pawfusion.models.data.domain.usecase.GetAllFavoriteBreedsUseCase
+import fina.dario.pawfusion.models.data.domain.usecase.GetAllFavoriteBreedsUseCaseImpl
+import fina.dario.pawfusion.models.data.domain.usecase.insertFavoriteBreedUseCase
+import fina.dario.pawfusion.models.data.domain.usecase.insertFavoriteBreedUseCaseImpl
 import fina.dario.pawfusion.resources.LocalDataSource
 import fina.dario.pawfusion.resources.LocalDataSourceImpl
+import fina.dario.pawfusion.resources.Repository
 import fina.dario.pawfusion.resources.RepositoryImpl
 import io.ktor.client.HttpClient
 import org.koin.core.context.startKoin
@@ -46,12 +53,23 @@ val sharedModule = module {
 
     //breedView model
     singleOf(::BreedsListViewModel)
-
+    singleOf(::BreedFavoritesViewModel)
     // Repo source
     singleOf(::LocalDataSourceImpl).bind<LocalDataSource>()
-    singleOf(::RepositoryImpl).bind<RepositoryImpl>()
+    singleOf(::RepositoryImpl).bind<Repository>()
 
-    viewModel { BreedFavoritesViewModel() }
+    factory {
+        GetAllFavoriteBreedsUseCaseImpl(get())
+    }.bind<GetAllFavoriteBreedsUseCase>()
+
+    factory {
+        insertFavoriteBreedUseCaseImpl(get())
+    }.bind<insertFavoriteBreedUseCase>()
+
+    factory {
+        DeleteFavoriteBReedByIdUseCaseImpl(get())
+    }.bind<DeleteFavoriteBReedByIdUseCase>()
+
 
     // Api needed functions
     singleOf(::GetBreedsListUseCase)
