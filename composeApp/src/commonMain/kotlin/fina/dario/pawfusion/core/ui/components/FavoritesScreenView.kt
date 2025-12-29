@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import fina.dario.pawfusion.core.BreedFavoritesViewModel
@@ -20,14 +22,15 @@ fun FavoritesScreenView(){
     val scope = rememberCoroutineScope()
     val breedFavoritesViewModel: BreedFavoritesViewModel = koinInject()
     breedFavoritesViewModel.loadFavorites()
-    var favorites = emptyList<FavoriteBreedModel>()
-    favorites = breedFavoritesViewModel.favorites.value.breeds
+
+    val favorites by breedFavoritesViewModel.favorites.collectAsState()
+
     // problem is in favorites are not empty list or there is a casting problem
 
     Box(modifier = Modifier.fillMaxSize()){
         Column(modifier = Modifier.fillMaxSize()){
             LazyColumn(modifier = Modifier.fillMaxSize()){
-                items(items = favorites){ item ->
+                items(items = favorites.breeds){ item ->
                     FavoritesBreedCard(item.type, item.averageLifeSpan)
                     }
                 }
