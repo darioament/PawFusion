@@ -3,6 +3,7 @@ package fina.dario.pawfusion.core.ui.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -52,6 +53,14 @@ fun TopAppBar(navigator: Navigator?, scrollBehavior: TopAppBarScrollBehavior) {
 
         },
         scrollBehavior = scrollBehavior,
+        actions = {
+            IconButton(onClick = { /*navigator?.push(SettingsScreen())*/ }) {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Search icon"
+                )
+            }
+        },
         navigationIcon = {
             IconButton(onClick = { /*navigator?.push(SettingsScreen())*/ }) {
                 Icon(
