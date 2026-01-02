@@ -57,6 +57,7 @@ internal class BreedsListViewModel(
     init {
         CoroutineScope(Dispatchers.IO).launch {
             launch {
+                breedFavoriteViewModel.loadFavorites()
                 setLoadingPhase()
                 getAllBreeds()
                 setLoadingPhaseDone()
