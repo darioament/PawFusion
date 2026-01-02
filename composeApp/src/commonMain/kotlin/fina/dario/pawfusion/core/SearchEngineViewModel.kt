@@ -5,6 +5,9 @@ import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.datetime.LocalTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class SearchEngineViewModel: ViewModel()
 {
@@ -20,10 +23,10 @@ class SearchEngineViewModel: ViewModel()
             it.not()
         }
     }
+    @OptIn(ExperimentalTime::class)
     fun onSearchTextChange(text: String) {
         _searchText.update{ text }
-        log.i("Search text changed to: ${_searchText.value}")
-        log.i("Search text(state flow) changed to: ${searchText.value}")
+        log.i("Current time of update is: ${Clock.System.now()}")
     }
     fun clearSearch(){
         _searchText.update{ "" }

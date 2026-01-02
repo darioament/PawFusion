@@ -45,11 +45,7 @@ fun BreedsListScreen(
     val breedSearchViewModel = koinInject<SearchEngineViewModel>()
     val isSearching by breedSearchViewModel.isSearching.collectAsState()
     val searchText by breedSearchViewModel.searchText.collectAsState()
-    val log = Logger.withTag("PawFusionLogger")
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    log.i("BreedsListScreen, isSearching: $isSearching, searchText: $searchText")
-    log.i("BreedsListScreen search text hash: ${breedSearchViewModel.hashCode()}")
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     Box (
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -70,7 +66,7 @@ fun BreedsListScreen(
                     Column(modifier = Modifier.fillMaxWidth()){
                         TextField(
                             value = searchText ,
-                            onValueChange = {searchText -> breedSearchViewModel.onSearchTextChange(searchText)},
+                            onValueChange = {searchText -> breedSearchViewModel.onSearchTextChange(searchText); breedListViewModel.search(searchText)},
                             placeholder = {Text(text = "Search")},
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()
