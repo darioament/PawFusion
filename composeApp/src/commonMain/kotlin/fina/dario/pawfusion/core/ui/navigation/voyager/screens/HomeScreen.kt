@@ -24,7 +24,8 @@ import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.ui.components.LoadingScreen
 
 import fina.dario.pawfusion.core.ui.theme.BreedRoutineTheme
-import org.koin.compose.viewmodel.koinViewModel
+import fina.dario.pawfusion.core.ui.navigation.voyager.screens.DetailScreen
+import org.koin.compose.koinInject
 
 
 class HomeScreen: Screen {
@@ -32,7 +33,7 @@ class HomeScreen: Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-        val breedListViewModel = koinViewModel<BreedsListViewModel>()
+        val breedListViewModel:BreedsListViewModel  = koinInject()
         val state by breedListViewModel.state.collectAsState()
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 

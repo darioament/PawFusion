@@ -6,7 +6,7 @@ import fina.dario.pawfusion.models.domain.GetBreedDetailsUseCase
 import fina.dario.pawfusion.models.domain.GetBreedsListUseCase
 import fina.dario.pawfusion.models.domain.api.BreedsRemoteDataSource
 import fina.dario.pawfusion.core.BreedFavoritesViewModel
-import fina.dario.pawfusion.core.BreedSearchViewModel
+import fina.dario.pawfusion.core.SearchEngineViewModel
 import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.database.favoriteBreed.FavoriteBreedDatabase
 import fina.dario.pawfusion.core.database.favoriteBreed.getFavoriteBreedDatabase
@@ -25,7 +25,6 @@ import io.ktor.client.HttpClient
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
-import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -55,7 +54,7 @@ val sharedModule = module {
     //breedView model
     singleOf(::BreedsListViewModel)
     singleOf(::BreedFavoritesViewModel)
-    singleOf(::BreedSearchViewModel)
+    singleOf(::SearchEngineViewModel)
     // Repo source
     singleOf(::LocalDataSourceImpl).bind<LocalDataSource>()
     singleOf(::RepositoryImpl).bind<Repository>()

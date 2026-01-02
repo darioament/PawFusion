@@ -1,22 +1,17 @@
 package fina.dario.pawfusion.core
 
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import fina.dario.pawfusion.models.domain.Breed.BreedFavorites
 import fina.dario.pawfusion.models.domain.GetBreedsListUseCase
 import fina.dario.pawfusion.models.domain.GetBreedDetailsUseCase
 import fina.dario.pawfusion.core.ui.components.UiBreedListItem
 import fina.dario.pawfusion.core.ui.components.UiBreedWeight
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onStart
 import fina.dario.pawfusion.core.domain.Result
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.delay
 
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -31,16 +26,33 @@ internal class BreedsListViewModel(
     private val getBreedsListUseCase: GetBreedsListUseCase,
     private val getBreedDetailUseCase: GetBreedDetailsUseCase,
     private val breedFavoriteViewModel: BreedFavoritesViewModel,
-    breedSearchViewModel: BreedSearchViewModel,
+    searchEngine: SearchEngineViewModel,
 ): ViewModel() {
 
     private val _state = MutableStateFlow(BreedsState())
     private val log = Logger.withTag("PawFusionLogger")
     private val _selectedBreed = MutableStateFlow(makeEmptyBreed())
-    private val searchText: StateFlow<String> = breedSearchViewModel.searchText
-
-
     val selectedBreed = _selectedBreed.asStateFlow()
+    val state: StateFlow<BreedsState> = searchEngine.searchText
+        .combine(_state) { text, currentState ->
+            log.i("Combine triggered with text: '$text'")
+            log.i("BreedsListView search text hash: ${searchEngine.hashCode()}")
+            log.i("Combine triggered with breedSearchViewModel.searchText: '${searchEngine.searchText.value}'")
+            if (text.isBlank()) {
+                currentState
+            } else {
+                val filteredBreeds = currentState.breeds.filter { breed ->
+                    breed.type.contains(text, ignoreCase = true)
+                }
+                log.i("Filtering completed, found ${filteredBreeds.size} breeds")
+                currentState.copy(breeds = filteredBreeds)
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = _state.value
+        )
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
@@ -51,49 +63,6 @@ internal class BreedsListViewModel(
             }
         }
     }
-
-    val state: StateFlow<BreedsState> = searchText
-        .combine(_state) { text, currentState ->
-            if (text.isEmpty()) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    getAllBreeds()
-                    log.i("Text is empty in getBreedList so calling getAllBreeds")
-                }
-                currentState
-            } else {
-
-                val filteredBreeds = currentState.breeds.filter { breed ->
-                    breed.type.contains(text, ignoreCase = true)
-                }
-                log.i("Text is not empty in getBreedList so filtering breeds")
-                currentState.copy(breeds = filteredBreeds)
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = _state.value
-        )
-
-
-
-
-    private  fun setLoadingPhaseDone() {
-        _state.update {
-            it.copy(
-                loading = false
-            )
-        }
-    }
-
-    private fun setLoadingPhase() {
-        _state.update {
-            it.copy(
-                loading = true
-            )
-        }
-    }
-
     private suspend fun getAllBreeds(){
         when(val breedsResponse = getBreedsListUseCase.execute()){
             is Result.Success -> {
@@ -137,7 +106,7 @@ internal class BreedsListViewModel(
         }
     }
 
-    suspend fun getBreedById(id: String){
+    fun getBreedById(id: String){
         CoroutineScope(Dispatchers.IO).launch {
             when (val breedResponse = getBreedDetailUseCase.execute(id)) {
                 is Result.Success -> {
@@ -195,12 +164,11 @@ internal class BreedsListViewModel(
                     breed
                 }
             }
-            // 2. Kreiranje novog stanja sa ažuriranom listi -> provjereno u logcat-u (RADI). Ne display-a dobro jer vuce podatke s api-a i onda su automatski false
             currentState.copy(breeds = updatedBreeds)
         }
     }
 
-    private fun makeEmptyBreed(): UiBreedListItem {  // -> ovo je potrebno zamijeniti kad se stvara. Dakle potrebno je provjeriti je li zapravo navedeni item favorite
+    private fun makeEmptyBreed(): UiBreedListItem {
         return UiBreedListItem(
             id = "",
             type = "Empty",
@@ -225,6 +193,26 @@ internal class BreedsListViewModel(
     }
 
     private fun calculateAverageLifeSpan(min: Int, max: Int) = (min + max) / 2
+
+
+
+
+
+    private  fun setLoadingPhaseDone() {
+        _state.update {
+            it.copy(
+                loading = false
+            )
+        }
+    }
+
+    private fun setLoadingPhase() {
+        _state.update {
+            it.copy(
+                loading = true
+            )
+        }
+    }
 
 }
 
