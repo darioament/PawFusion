@@ -52,6 +52,7 @@ fun BreedsListScreen(
     val isSearching by breedSearchViewModel.isSearching.collectAsState()
     val state by breedListViewModel.state.collectAsState()
     var searchText by remember { mutableStateOf("") }
+
     Box (
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -69,29 +70,38 @@ fun BreedsListScreen(
                 label = "TextFieldAnimation"
             ){ isSearching ->
                 if (isSearching){
-                    TextField(
-                        value = searchText,
-                        onValueChange = { searchText = it},
-                        placeholder = {Text(text = "Search")},
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth()
-                            .background(shape = RoundedCornerShape(10.dp),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant),
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = MaterialTheme.colorScheme.primary,
-                        ),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Done
-                        ),
-                        keyboardActions = KeyboardActions { focusManager.clearFocus() }
+                    Column(modifier = Modifier.fillMaxWidth()){
+                        TextField(
+                            value = searchText ,
+                            onValueChange = { searchText = it; breedSearchViewModel.onSearchTextChange(searchText)},
+                            placeholder = {Text(text = "Search")},
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                                .background(shape = RoundedCornerShape(10.dp),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant),
+                            colors = TextFieldDefaults.colors(
+                                unfocusedContainerColor = MaterialTheme.colorScheme.primary,
+                            ),
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                imeAction = ImeAction.Done
+                            ),
+                            keyboardActions = KeyboardActions { focusManager.clearFocus() }
+                        )
+                        BreedsListComponent(
+                            state = state,
+                            onBreedClicked = onBreedClicked
+                        )
+                    }
+
+                }
+                else{
+                    BreedsListComponent(
+                        state = state,
+                        onBreedClicked = onBreedClicked
                     )
                 }
-
             }
-            BreedsListComponent(
-                state = state,
-                onBreedClicked = onBreedClicked
-            )    
+
         }
         
     }

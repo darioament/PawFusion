@@ -1,5 +1,7 @@
 package fina.dario.pawfusion.core
 
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
@@ -14,9 +16,12 @@ import fina.dario.pawfusion.core.domain.Result
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.delay
 
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,32 +30,55 @@ import kotlinx.coroutines.launch
 internal class BreedsListViewModel(
     private val getBreedsListUseCase: GetBreedsListUseCase,
     private val getBreedDetailUseCase: GetBreedDetailsUseCase,
-    private val breedFavoriteViewModel: BreedFavoritesViewModel
-): ViewModel(){
+    private val breedFavoriteViewModel: BreedFavoritesViewModel,
+    breedSearchViewModel: BreedSearchViewModel,
+): ViewModel() {
 
     private val _state = MutableStateFlow(BreedsState())
     private val log = Logger.withTag("PawFusionLogger")
     private val _selectedBreed = MutableStateFlow(makeEmptyBreed())
+    private val searchText: StateFlow<String> = breedSearchViewModel.searchText
+
 
     val selectedBreed = _selectedBreed.asStateFlow()
 
-
-    val state = _state.asStateFlow().onStart {
+    init {
         CoroutineScope(Dispatchers.IO).launch {
-            launch{
+            launch {
                 setLoadingPhase()
                 getAllBreeds()
                 setLoadingPhaseDone()
-            } // napraviti preko init-a
+            }
         }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = BreedsState()
-    )
+    }
+
+    val state: StateFlow<BreedsState> = searchText
+        .combine(_state) { text, currentState ->
+            if (text.isEmpty()) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    getAllBreeds()
+                    log.i("Text is empty in getBreedList so calling getAllBreeds")
+                }
+                currentState
+            } else {
+
+                val filteredBreeds = currentState.breeds.filter { breed ->
+                    breed.type.contains(text, ignoreCase = true)
+                }
+                log.i("Text is not empty in getBreedList so filtering breeds")
+                currentState.copy(breeds = filteredBreeds)
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = _state.value
+        )
 
 
-    private suspend fun setLoadingPhaseDone() {
+
+
+    private  fun setLoadingPhaseDone() {
         _state.update {
             it.copy(
                 loading = false
@@ -58,7 +86,7 @@ internal class BreedsListViewModel(
         }
     }
 
-    private suspend fun setLoadingPhase() {
+    private fun setLoadingPhase() {
         _state.update {
             it.copy(
                 loading = true
@@ -191,6 +219,7 @@ internal class BreedsListViewModel(
         )
     }
     private fun isInFavorites(id: String): Boolean {
+
         log.d("Checking favorite: ${breedFavoriteViewModel.favorites.value.breeds.any { it.id == id }}")
         return breedFavoriteViewModel.favorites.value.breeds.any { it.id == id }
     }

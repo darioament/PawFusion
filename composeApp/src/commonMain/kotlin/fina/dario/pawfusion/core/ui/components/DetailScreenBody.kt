@@ -49,9 +49,8 @@ fun DetailScreenBody(
     breed: UiBreedListItem,
     onNavigateBack: () -> Unit,
 ) {
-    val breedListViewModel = koinViewModel<BreedsListViewModel>()
-    val state by breedListViewModel.state.collectAsState()
-    val favoriteBreedViewModel = koinViewModel<BreedFavoritesViewModel>()
+    val breedListViewModel: BreedsListViewModel = koinInject()
+    val breedsSearchViewModel: BreedFavoritesViewModel = koinInject()
     val scope = rememberCoroutineScope()
     BreedRoutineTheme {
         Column(
