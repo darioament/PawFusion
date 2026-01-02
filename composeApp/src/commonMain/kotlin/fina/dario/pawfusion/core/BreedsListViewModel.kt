@@ -42,12 +42,13 @@ internal class BreedsListViewModel(
 
     val state = _state.asStateFlow()
 
-    fun search(query: String){
+    fun search(query: String) {
+
         CoroutineScope(Dispatchers.IO).launch {
-            val result = if(query.isBlank()){
+            val result = if (query.isBlank()) {
                 _allBreeds
             } else {
-                _state.value.breeds.filter {
+                _allBreeds.filter {
                     it.type.contains(query, ignoreCase = true)
                 }
             }

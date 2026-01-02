@@ -85,7 +85,6 @@ fun BreedsListScreen(
                             onBreedClicked = onBreedClicked
                         )
                     }
-
                 }
                 else{
                     BreedsListComponent(
