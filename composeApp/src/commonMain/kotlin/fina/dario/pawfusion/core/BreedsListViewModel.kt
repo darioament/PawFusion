@@ -88,7 +88,7 @@ internal class BreedsListViewModel(
                                     min = breedItem.breed.attributes.female_weight.min,
                                     max = breedItem.breed.attributes.female_weight.max,
                                 ),
-                                isFavorite = isInFavorites(id = breedItem.breed.id) // ovo je problem kod favorite-a
+                                isFavorite = isInFavorites(id = breedItem.breed.id)
                             )
                         },
                     )
@@ -106,7 +106,6 @@ internal class BreedsListViewModel(
             }
         }
     }
-
     fun getBreedById(id: String){
         CoroutineScope(Dispatchers.IO).launch {
             when (val breedResponse = getBreedDetailUseCase.execute(id)) {
