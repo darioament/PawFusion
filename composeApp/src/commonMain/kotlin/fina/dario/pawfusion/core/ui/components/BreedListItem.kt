@@ -33,7 +33,7 @@ fun BreedListItem(
         Card(
             modifier = Modifier
                 .height(100.dp).width(375.dp)
-                .background(color = Color.White)
+                .background(color = Color.Transparent)
                 .padding(2.dp),
             shape = RoundedCornerShape(8.dp),
             elevation = CardDefaults.cardElevation(1.dp),

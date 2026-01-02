@@ -1,5 +1,6 @@
 package fina.dario.pawfusion.core.ui.theme
 
+
 import androidx.compose.ui.graphics.Color
 
 internal val PrimaryLight = Color(0xFFFFFFFF)
