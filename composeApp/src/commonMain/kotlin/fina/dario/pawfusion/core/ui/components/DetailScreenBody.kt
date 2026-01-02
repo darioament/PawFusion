@@ -1,6 +1,7 @@
 package fina.dario.pawfusion.core.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,7 +52,8 @@ fun DetailScreenBody(
 ) {
     val breedListViewModel: BreedsListViewModel = koinInject()
     val breedsSearchViewModel: BreedFavoritesViewModel = koinInject()
-    val scope = rememberCoroutineScope()
+    val isDarkTheme = isSystemInDarkTheme()
+
     BreedRoutineTheme {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -106,7 +108,7 @@ fun DetailScreenBody(
                         text = breed?.type ?: "Empty",
                         fontSize = MaterialTheme.typography.titleMedium.fontSize,
                         fontWeight = MaterialTheme.typography.titleMedium.fontWeight,
-                        color = Color.Black
+                        color = if(isDarkTheme) Color.Gray else Color.Black
                     )
                 }
 
@@ -170,16 +172,17 @@ fun AttributeCard(
     title: String,
     subtitle: String,
 ){
+    val isDarkTheme = isSystemInDarkTheme()
     Card(
         modifier = Modifier
             .height(70.dp)
             .width(110.dp)
-            .background(color = Color.White, shape = RoundedCornerShape(12.dp)),
+            .background(color = if(isDarkTheme) Color.Gray else Color.White, shape = RoundedCornerShape(12.dp)),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(1.dp)
     ){
         Box(
-            modifier = Modifier.fillMaxSize().background(color = Color.White, shape = RoundedCornerShape(12.dp)),
+            modifier = Modifier.fillMaxSize().background(color = if(isDarkTheme) Color.Gray else Color.White, shape = RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center
         ){
             Column(
@@ -189,14 +192,14 @@ fun AttributeCard(
             ){
                 Text(
                     text = title,
-                    color = Color.Gray,
+                    color = if(isDarkTheme) Color.DarkGray else Color.Gray,
                     fontSize = MaterialTheme.typography.titleSmall.fontSize,
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = subtitle,
                     fontWeight = MaterialTheme.typography.titleSmall.fontWeight,
-                    color = Color.Gray,
+                    color = if(isDarkTheme) Color.DarkGray else Color.Gray,
                 )
             }
 

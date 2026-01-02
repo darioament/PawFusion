@@ -1,6 +1,7 @@
 package fina.dario.pawfusion.core.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,7 @@ import org.koin.compose.koinInject
 fun FavoritesScreenView(){
     val breedFavoritesViewModel: BreedFavoritesViewModel = koinInject()
     val favorites by breedFavoritesViewModel.favorites.collectAsState()
+    val isDarkTheme = isSystemInDarkTheme()
 
     Box(modifier = Modifier.fillMaxSize()){
         Column(modifier = Modifier.fillMaxSize()){

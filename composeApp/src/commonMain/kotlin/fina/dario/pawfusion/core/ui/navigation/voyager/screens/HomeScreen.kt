@@ -37,11 +37,12 @@ class HomeScreen: Screen {
         val state by breedListViewModel.state.collectAsState()
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
+
         if(state.loading){
             LoadingScreen()
         }
         else{
-            BreedRoutineTheme {
+            BreedRoutineTheme(){
                 Scaffold(
                     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                     topBar = {
