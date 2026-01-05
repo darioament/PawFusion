@@ -1,11 +1,9 @@
 package fina.dario.pawfusion.core
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.room.Query
 import co.touchlab.kermit.Logger
-import fina.dario.pawfusion.models.domain.GetBreedsListUseCase
-import fina.dario.pawfusion.models.domain.GetBreedDetailsUseCase
+import fina.dario.pawfusion.models.domain.usecase.GetBreedsListUseCase
+import fina.dario.pawfusion.models.domain.usecase.GetBreedDetailsUseCase
 import fina.dario.pawfusion.core.ui.components.UiBreedListItem
 import fina.dario.pawfusion.core.ui.components.UiBreedWeight
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,15 +12,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
 
 internal class BreedsListViewModel(
