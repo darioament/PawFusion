@@ -27,7 +27,7 @@ kotlinStdlib = "2.1.0"
 runner = "1.7.0"
 core = "1.7.0"
 voyager = "1.1.0-beta03"
-
+datastore = "1.1.1"
 
 
 [libraries]

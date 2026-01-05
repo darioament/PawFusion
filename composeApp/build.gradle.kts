@@ -84,6 +84,9 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.navigation)
 
+            implementation("androidx.datastore:datastore:1.2.0")
+            implementation("androidx.datastore:datastore-preferences:1.2.0")
+
             implementation(project(path = ":navigation"))
         }
         commonTest.dependencies {
