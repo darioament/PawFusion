@@ -27,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,14 +34,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import fina.dario.pawfusion.core.BreedFavoritesViewModel
 import fina.dario.pawfusion.core.BreedsListViewModel
-import fina.dario.pawfusion.core.ui.theme.BreedRoutineTheme
-import fina.dario.pawfusion.models.data.domain.usecase.insertFavoriteBreedUseCase
-import fina.dario.pawfusion.models.data.domain.usecase.insertFavoriteBreedUseCaseImpl
-import fina.dario.pawfusion.models.data.mapper.toFavoriteBreedModel
-import kotlinx.coroutines.launch
-import org.koin.compose.LocalKoinScope
+import fina.dario.pawfusion.core.ThemeViewModel
 import org.koin.compose.koinInject
-import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
@@ -52,118 +45,118 @@ fun DetailScreenBody(
 ) {
     val breedListViewModel: BreedsListViewModel = koinInject()
     val breedsSearchViewModel: BreedFavoritesViewModel = koinInject()
-    val isDarkTheme = isSystemInDarkTheme()
-
-    BreedRoutineTheme {
-        Column(
-            modifier = Modifier.fillMaxSize()
+    val themeViewModel: ThemeViewModel = koinInject()
+    val isDarkTheme by themeViewModel.useDynamicColors.collectAsState()
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ){
+        Row(
+            modifier = Modifier.padding(vertical = 65.dp, horizontal = 20.dp)
         ){
-            Row(
-                modifier = Modifier.padding(vertical = 65.dp, horizontal = 20.dp)
-            ){
-                IconButton(onClick = onNavigateBack ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
-                        contentDescription = "Localized description",
-                        tint = Color.Gray
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                Card(
-                    modifier = Modifier
-                        .height(45.dp)
-                        .width(45.dp)
-                        .background(color = MaterialTheme.colorScheme.outlineVariant, shape = RoundedCornerShape(12.dp)),
-                    shape = RoundedCornerShape(12.dp),
-                    elevation = CardDefaults.cardElevation(1.dp)
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize()
-                            .background(color = MaterialTheme.colorScheme.outlineVariant, shape = RoundedCornerShape(12.dp)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        IconButton(onClick =
-                            {
-                                breedListViewModel.toggleFavorite()
-                            }) {
-                            Icon(
-                                imageVector = Icons.Filled.Favorite,
-                                contentDescription = "Localized description",
-                                tint =  if(breed.isFavorite) Color.Gray else Color.White
-                            )
-                        }
-                    }
-                }
-
+            IconButton(onClick = onNavigateBack ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBackIos,
+                    contentDescription = "Localized description",
+                    tint = Color.Gray
+                )
             }
-
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom
+            Spacer(modifier = Modifier.weight(1f))
+            Card(
+                modifier = Modifier
+                    .height(45.dp)
+                    .width(45.dp)
+                    .background(color = MaterialTheme.colorScheme.outlineVariant, shape = RoundedCornerShape(12.dp)),
+                shape = RoundedCornerShape(12.dp),
+                elevation = CardDefaults.cardElevation(1.dp)
             ) {
                 Box(
-                    modifier = Modifier.padding(20.dp)
+                    modifier = Modifier.fillMaxSize()
+                        .background(color = MaterialTheme.colorScheme.outlineVariant, shape = RoundedCornerShape(12.dp)),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = breed?.type ?: "Empty",
-                        fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                        fontWeight = MaterialTheme.typography.titleMedium.fontWeight,
-                        color = if(isDarkTheme) Color.Gray else Color.Black
-                    )
-                }
-
-
-                Spacer(modifier = Modifier.height(20.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight(0.5f)
-                        .fillMaxWidth()
-                        .background(
-                            color = MaterialTheme.colorScheme.outlineVariant,
-                            shape = RoundedCornerShape(25.dp)
-                        ),
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize().padding(20.dp),
-                    ) {
-                        Box(
-                            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                AttributeCard(
-                                    title = "Male Weight",
-                                    subtitle = breed?.male_weight?.max.toString()
-                                )
-                                Spacer( modifier = Modifier.width(15.dp))
-                                AttributeCard(
-                                    title = "Female Weight",
-                                    subtitle = breed?.female_weight?.max.toString()
-                                )
-                                Spacer( modifier = Modifier.width(15.dp))
-                                AttributeCard(
-                                    title = "Life Span",
-                                    subtitle = breed?.averageLifeSpan.toString()
-                                )
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(30.dp))
-                        Text(
-                            text = breed?.description ?: "Nothing",
-                            fontSize = MaterialTheme.typography.titleSmall.fontSize,
-                            color = Color.Gray,
-                            textAlign = TextAlign.Start
+                    IconButton(onClick =
+                        {
+                            breedListViewModel.toggleFavorite()
+                        }) {
+                        Icon(
+                            imageVector = Icons.Filled.Favorite,
+                            contentDescription = "Localized description",
+                            tint =  if(breed.isFavorite) Color.Gray else Color.White
                         )
                     }
                 }
             }
+
         }
 
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            Box(
+                modifier = Modifier.padding(20.dp)
+            ) {
+                Text(
+                    text = breed?.type ?: "Empty",
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    fontWeight = MaterialTheme.typography.titleMedium.fontWeight,
+                    color = if(isDarkTheme) Color.Gray else Color.Black
+                )
+            }
 
+
+            Spacer(modifier = Modifier.height(20.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight(0.5f)
+                    .fillMaxWidth()
+                    .background(
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        shape = RoundedCornerShape(25.dp)
+                    ),
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(20.dp),
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            AttributeCard(
+                                title = "Male Weight",
+                                subtitle = breed?.male_weight?.max.toString()
+                            )
+                            Spacer( modifier = Modifier.width(15.dp))
+                            AttributeCard(
+                                title = "Female Weight",
+                                subtitle = breed?.female_weight?.max.toString()
+                            )
+                            Spacer( modifier = Modifier.width(15.dp))
+                            AttributeCard(
+                                title = "Life Span",
+                                subtitle = breed?.averageLifeSpan.toString()
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(30.dp))
+                    Text(
+                        text = breed?.description ?: "Nothing",
+                        fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                        color = Color.Gray,
+                        textAlign = TextAlign.Start
+                    )
+                }
+            }
+        }
     }
+
+
+
+
 
 }
 

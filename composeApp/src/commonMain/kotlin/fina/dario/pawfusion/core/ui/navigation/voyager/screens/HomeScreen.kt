@@ -22,9 +22,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import fina.dario.pawfusion.core.ui.components.BreedsListScreen
 import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.ui.components.LoadingScreen
-
-import fina.dario.pawfusion.core.ui.theme.BreedRoutineTheme
-import fina.dario.pawfusion.core.ui.navigation.voyager.screens.DetailScreen
 import org.koin.compose.koinInject
 
 
@@ -42,24 +39,22 @@ class HomeScreen: Screen {
             LoadingScreen()
         }
         else{
-            BreedRoutineTheme(){
-                Scaffold(
-                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                    topBar = {
-                        TopAppBar(navigator, scrollBehavior)
-                    },
+            Scaffold(
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                topBar = {
+                    TopAppBar(navigator, scrollBehavior)
+                },
 
 
-                    ) { innerPadding ->
-                    Spacer(modifier = Modifier.height(15.dp))
-                    Box(
-                        modifier = Modifier.padding(innerPadding).fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ){
-                        BreedsListScreen(navigator, onBreedClicked = {itemId->
-                            navigator?.push(DetailScreen(id = itemId))
-                        })
-                    }
+                ) { innerPadding ->
+                Spacer(modifier = Modifier.height(15.dp))
+                Box(
+                    modifier = Modifier.padding(innerPadding).fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ){
+                    BreedsListScreen(navigator, onBreedClicked = {itemId->
+                        navigator?.push(DetailScreen(id = itemId))
+                    })
                 }
             }
         }

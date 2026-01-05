@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 private val LightColorScheme = lightColorScheme(
     primary = PrimaryLight,
     onPrimary = OnPrimaryLight,
-    primaryContainer = PrimaryContainerLight,
+    primaryContainer = OutlineVariantLight,
     onPrimaryContainer = OnPrimaryContainerLight,
     secondary = SecondaryLight,
     onSecondary = OnSecondaryLight,
@@ -48,7 +48,7 @@ private val LightColorScheme = lightColorScheme(
 private val DarkColorScheme = darkColorScheme(
     primary = SurfaceVariantDark,
     onPrimary = SurfaceVariantDark,
-    primaryContainer = PrimaryContainerDark,
+    primaryContainer = OutlineVariantDark,
     onPrimaryContainer = OnPrimaryContainerDark,
     secondary = SecondaryDark,
     onSecondary = OnSecondaryDark,
@@ -85,7 +85,7 @@ private val DarkColorScheme = darkColorScheme(
 
 @Composable
 internal fun BreedRoutineTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean,
     content: @Composable () -> Unit
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme

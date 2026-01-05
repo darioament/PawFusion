@@ -11,6 +11,7 @@ import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.database.favoriteBreed.FavoriteBreedDatabase
 import fina.dario.pawfusion.core.database.favoriteBreed.getFavoriteBreedDatabase
 import fina.dario.pawfusion.core.network.HttpClientFactory
+import fina.dario.pawfusion.core.ThemeViewModel
 import fina.dario.pawfusion.models.data.domain.usecase.DeleteFavoriteBReedByIdUseCase
 import fina.dario.pawfusion.models.data.domain.usecase.DeleteFavoriteBReedByIdUseCaseImpl
 import fina.dario.pawfusion.models.data.domain.usecase.GetAllFavoriteBreedsUseCase
@@ -55,6 +56,7 @@ val sharedModule = module {
     singleOf(::BreedsListViewModel)
     singleOf(::BreedFavoritesViewModel)
     singleOf(::SearchEngineViewModel)
+    singleOf(::ThemeViewModel)
     // Repo source
     singleOf(::LocalDataSourceImpl).bind<LocalDataSource>()
     singleOf(::RepositoryImpl).bind<Repository>()
