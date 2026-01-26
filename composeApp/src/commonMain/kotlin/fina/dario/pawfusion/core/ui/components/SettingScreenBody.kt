@@ -23,17 +23,33 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
 import fina.dario.pawfusion.core.ThemeViewModel
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
 @Composable
 fun SettingsScreenBody(modifier: Modifier){
+    val prefs: DataStore<Preferences> = koinInject()
     val themeViewModel: ThemeViewModel = koinInject()
     val isDarkTheme by themeViewModel.useDynamicColors.collectAsState()
+    val scope = rememberCoroutineScope()
+
+
+    val theme by prefs
+        .data.map { dataStore ->
+            val themeKey = booleanPreferencesKey("theme")
+            dataStore[themeKey]  ?: false
+        }.collectAsState( false )
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -62,7 +78,15 @@ fun SettingsScreenBody(modifier: Modifier){
                 ){
                     IconButton(
                         modifier = Modifier.padding(5.dp).height(55.dp).width(100.dp),
-                        onClick = { themeViewModel.setLightTheme() },
+                        onClick = {
+                            scope.launch {
+                                prefs.edit { datastore ->
+                                    val themeKey = booleanPreferencesKey("theme")
+                                    datastore[themeKey]?.let { datastore[themeKey] = !it }
+                                }
+                            }
+                            themeViewModel.setTheme(theme)
+                        },
                         shape = RoundedCornerShape(12.dp),
                         colors = IconButtonDefaults.iconButtonColors(
                             containerColor = Color.Transparent
@@ -78,7 +102,17 @@ fun SettingsScreenBody(modifier: Modifier){
                     IconButton(
                         modifier = Modifier.padding(5.dp).height(55.dp).width(100.dp),
                         shape = RoundedCornerShape(12.dp),
-                        onClick = { themeViewModel.setDarkTheme() },
+                        onClick = {
+                            scope.launch {
+                                prefs.edit { datastore ->
+                                    val themeKey = booleanPreferencesKey("theme")
+                                    datastore[themeKey] = !theme
+                                }
+                            }.invokeOnCompletion {
+                                themeViewModel.setTheme(theme)
+                            }
+
+                        },
                         colors = IconButtonDefaults.iconButtonColors(
                             containerColor = Color.Transparent
 

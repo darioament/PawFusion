@@ -11,7 +11,12 @@ class ThemeViewModel: ViewModel() {
     val useDynamicColors = _isDarkTheme.asStateFlow()
     private val log = Logger.withTag("PawFusionLogger")
 
-
+    fun setTheme(theme: Boolean){
+        _isDarkTheme.update {
+            theme
+        }
+        log.i("Theme set, current value of isDark: ${_isDarkTheme.value}")
+    }
     fun setDarkTheme(){
         _isDarkTheme.update{
             true
