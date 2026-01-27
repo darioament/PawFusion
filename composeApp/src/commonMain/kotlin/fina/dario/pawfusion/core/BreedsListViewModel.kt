@@ -33,6 +33,8 @@ internal class BreedsListViewModel(
     val selectedBreed = _selectedBreed.asStateFlow()
 
     val state = _state.asStateFlow()
+    val errorWasShown = MutableStateFlow(false)
+
 
     fun search(query: String) {
 
@@ -94,6 +96,9 @@ internal class BreedsListViewModel(
                     )
 
                 }
+                errorWasShown.update {
+                    false
+                }
                 _state.update {
                     it.copy(
                         loading = false,
@@ -103,12 +108,18 @@ internal class BreedsListViewModel(
             }
             is Result.Error -> {
                 log.i("Result is error in getBreedList")
-                _state.update{
-                    it.copy(
-                        loading = false,
-                        breeds = emptyList(),
-                        error = "Something went wrong, Check your internet connection."
-                    )
+                if(! errorWasShown.value){
+                    _state.update{
+                        it.copy(
+                            loading = false,
+                            breeds = emptyList(),
+                            error = "Something went wrong, Check your internet connection."
+                        )
+                    }
+                }
+
+                errorWasShown.update {
+                    true
                 }
 
             }
@@ -137,6 +148,9 @@ internal class BreedsListViewModel(
                                     isFavorite = isInFavorites(breedResponse.data.breed.id)
                                 )
                             }
+                    errorWasShown.update {
+                        false
+                    }
 
 
                 }
@@ -147,6 +161,9 @@ internal class BreedsListViewModel(
                             loading = false,
                             error = "Something went wrong, Check your internet connection."
                         )
+                    }
+                    errorWasShown.update {
+                        true
                     }
                 }
 
@@ -159,6 +176,9 @@ internal class BreedsListViewModel(
             it.copy(
                 error = null
             )
+        }
+        errorWasShown.update {
+            true
         }
     }
 

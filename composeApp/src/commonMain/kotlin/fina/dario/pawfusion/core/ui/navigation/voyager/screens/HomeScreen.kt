@@ -1,6 +1,7 @@
 package fina.dario.pawfusion.core.ui.navigation.voyager.screens
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
@@ -31,6 +32,8 @@ import fina.dario.pawfusion.core.ui.components.BreedsListScreen
 import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.ui.components.ErrorDialog
 import fina.dario.pawfusion.core.ui.components.LoadingScreen
+import fina.dario.pawfusion.core.ui.navigation.voyager.NavHost
+import fina.dario.pawfusion.core.ui.theme.BreedRoutineTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -47,6 +50,7 @@ class HomeScreen: Screen {
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
         var showErrorDialog by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
+        val errorWasShown by breedListViewModel.errorWasShown.collectAsState()
 
         if(state.loading){
             LoadingScreen()
@@ -55,6 +59,13 @@ class HomeScreen: Screen {
             showErrorDialog = true
         }
         else{
+            if( errorWasShown && state.error == null){
+                scope.launch {
+                    breedListViewModel.getAllBreeds()
+                }.invokeOnCompletion {
+                    navigator?.push(HomeScreen())
+                }
+            }
             Scaffold(
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 topBar = {

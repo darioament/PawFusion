@@ -64,6 +64,8 @@ fun DetailScreenBody(
     val isDarkTheme by themeViewModel.useDynamicColors.collectAsState()
     var showErrorDialog by remember { mutableStateOf(false) }
     val state by breedListViewModel.state.collectAsState()
+    val errorWasShown by breedListViewModel.errorWasShown.collectAsState()
+    var onClick by remember { mutableStateOf({}) }
 
     if(state.error != null){
         showErrorDialog = true
@@ -95,10 +97,13 @@ fun DetailScreenBody(
                         .background(color = MaterialTheme.colorScheme.outlineVariant, shape = RoundedCornerShape(12.dp)),
                     contentAlignment = Alignment.Center
                 ) {
-                    IconButton(onClick =
-                        {
-                            breedListViewModel.toggleFavorite()
-                        }) {
+                    if(errorWasShown){
+                        onClick = {}
+                    }
+                    else{
+                        onClick = { breedListViewModel.toggleFavorite() }
+                    }
+                    IconButton(onClick = onClick) {
                         Icon(
                             imageVector = Icons.Filled.Favorite,
                             contentDescription = "Localized description",
