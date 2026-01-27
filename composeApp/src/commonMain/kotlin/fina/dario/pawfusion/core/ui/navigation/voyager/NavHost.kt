@@ -1,8 +1,5 @@
 package fina.dario.pawfusion.core.ui.navigation.voyager
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -17,11 +14,16 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import fina.dario.pawfusion.core.ThemeViewModel
-import fina.dario.pawfusion.myTabs
+import fina.dario.pawfusion.core.ui.navigation.voyager.tab.favorites.FavoritesTab
 import fina.dario.pawfusion.core.ui.navigation.voyager.tab.home.HomeTab
-import fina.dario.pawfusion.core.ui.theme.BreedRoutineTheme
+import fina.dario.pawfusion.core.ui.navigation.voyager.tab.settings.SettingsTab
 import org.koin.compose.koinInject
 
+val myTabs = listOf(
+    HomeTab,
+    FavoritesTab,
+    SettingsTab
+)
 @Composable
 fun NavHost(){
     TabNavigator(HomeTab) {
