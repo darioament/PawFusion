@@ -11,6 +11,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import fina.dario.pawfusion.core.ThemeViewModel
 import fina.dario.pawfusion.core.ui.theme.BreedRoutineTheme
 import fina.dario.pawfusion.core.ui.navigation.voyager.NavHost
@@ -32,7 +34,6 @@ val myTabs = listOf(
 fun App() {
     val themeViewModel: ThemeViewModel = koinInject()
     val prefs: DataStore<Preferences> = koinInject()
-
     val theme by prefs
         .data.map { dataStore ->
             val themeKey = booleanPreferencesKey("theme")
@@ -46,7 +47,7 @@ fun App() {
 
 
     Crossfade(targetState = isDarkTheme, animationSpec = tween()){ newTheme ->
-        BreedRoutineTheme(newTheme) {
+        BreedRoutineTheme(isDarkTheme) {
             NavHost()
         }
     }

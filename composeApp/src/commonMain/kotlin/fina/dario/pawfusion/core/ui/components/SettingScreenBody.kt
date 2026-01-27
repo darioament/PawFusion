@@ -82,7 +82,7 @@ fun SettingsScreenBody(modifier: Modifier){
                             scope.launch {
                                 prefs.edit { datastore ->
                                     val themeKey = booleanPreferencesKey("theme")
-                                    datastore[themeKey]?.let { datastore[themeKey] = !it }
+                                    datastore[themeKey] = false
                                 }
                             }
                             themeViewModel.setTheme(theme)
@@ -106,7 +106,7 @@ fun SettingsScreenBody(modifier: Modifier){
                             scope.launch {
                                 prefs.edit { datastore ->
                                     val themeKey = booleanPreferencesKey("theme")
-                                    datastore[themeKey] = !theme
+                                    datastore[themeKey] = true
                                 }
                             }.invokeOnCompletion {
                                 themeViewModel.setTheme(theme)

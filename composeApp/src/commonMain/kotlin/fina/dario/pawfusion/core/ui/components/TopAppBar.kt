@@ -63,7 +63,7 @@ fun TopAppBar(navigator: Navigator?, scrollBehavior: TopAppBarScrollBehavior) {
         },
         scrollBehavior = scrollBehavior,
         actions = {
-            IconButton(onClick = { breedSearchViewModel.setSearching(); if(!breedSearchViewModel.isSearching.value) breedSearchViewModel.clearSearch() }) {
+            IconButton(onClick = { breedSearchViewModel.setSearching();  }) {
                 Icon(
                     imageVector = Icons.Filled.Search,
                     contentDescription = "Search icon"
