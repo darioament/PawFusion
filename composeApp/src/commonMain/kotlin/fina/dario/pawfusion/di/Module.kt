@@ -8,7 +8,7 @@ import fina.dario.pawfusion.models.domain.api.BreedsRemoteDataSource
 import fina.dario.pawfusion.core.BreedFavoritesViewModel
 import fina.dario.pawfusion.core.SearchEngineViewModel
 import fina.dario.pawfusion.core.BreedsListViewModel
-import fina.dario.pawfusion.core.ConnectivityViewModel
+//import fina.dario.pawfusion.core.ConnectivityViewModel
 import fina.dario.pawfusion.core.database.favoriteBreed.FavoriteBreedDatabase
 import fina.dario.pawfusion.core.database.favoriteBreed.getFavoriteBreedDatabase
 import fina.dario.pawfusion.core.network.HttpClientFactory
@@ -59,7 +59,7 @@ val sharedModule = module {
     singleOf(::SearchEngineViewModel)
     singleOf(::ThemeViewModel)
     //Internet connection checlker
-    singleOf(::ConnectivityViewModel)
+//    singleOf(::ConnectivityViewModel)
     // Repo source
     singleOf(::LocalDataSourceImpl).bind<LocalDataSource>()
     singleOf(::RepositoryImpl).bind<Repository>()

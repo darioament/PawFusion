@@ -62,10 +62,12 @@ fun DetailScreenBody(
     val breedsSearchViewModel: BreedFavoritesViewModel = koinInject()
     val themeViewModel: ThemeViewModel = koinInject()
     val isDarkTheme by themeViewModel.useDynamicColors.collectAsState()
-    var showBottomSheet by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false,)
+    var showErrorDialog by remember { mutableStateOf(false) }
+    val state by breedListViewModel.state.collectAsState()
 
+    if(state.error != null){
+        showErrorDialog = true
+    }
     Column(
         modifier = Modifier.fillMaxSize()
     ){
@@ -171,6 +173,9 @@ fun DetailScreenBody(
             }
 
         }
+    }
+    if(showErrorDialog){
+        ErrorDialog(Modifier, state.error.toString(), onDismiss = {showErrorDialog = false; breedListViewModel.clearError()} )
     }
 }
 

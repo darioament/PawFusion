@@ -77,7 +77,7 @@ kotlin {
             implementation(libs.voyager.transitions)
 
             // Network checker
-            implementation("network.chaintech:compose-connectivity-monitor:1.0.4")
+            //implementation("network.chaintech:compose-connectivity-monitor:1.0.4")
 
 
 

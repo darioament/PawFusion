@@ -62,12 +62,13 @@ internal class BreedsListViewModel(
             }
         }
     }
-    private suspend fun getAllBreeds(){
+    public suspend fun getAllBreeds(){
         when(val breedsResponse = getBreedsListUseCase.execute()){
             is Result.Success -> {
                 log.i("Result is success")
                 _state.update {
                     BreedsState(
+                        loading = true,
                         breeds = breedsResponse.data.map{breedItem ->
                             UiBreedListItem(
                                 id = breedItem.breed.id,
@@ -89,6 +90,13 @@ internal class BreedsListViewModel(
                                 isFavorite = isInFavorites(id = breedItem.breed.id)
                             )
                         },
+                        error = null
+                    )
+
+                }
+                _state.update {
+                    it.copy(
+                        loading = false,
                     )
                 }
                 _allBreeds = _state.value.breeds
@@ -97,8 +105,9 @@ internal class BreedsListViewModel(
                 log.i("Result is error in getBreedList")
                 _state.update{
                     it.copy(
+                        loading = false,
                         breeds = emptyList(),
-                        error = null // TODO: handle breedResponse.error.toUiText()
+                        error = "Something went wrong, Check your internet connection."
                     )
                 }
 
@@ -133,38 +142,78 @@ internal class BreedsListViewModel(
                 }
                 is Result.Error -> {
                     log.i("Result is error in getBreedID2")
+                    _state.update{
+                        it.copy(
+                            loading = false,
+                            error = "Something went wrong, Check your internet connection."
+                        )
+                    }
                 }
 
             }
         }
         log.i("breed in getBreedId2 ${_selectedBreed.value.type}")
     }
+    fun clearError(){
+        _state.update {
+            it.copy(
+                error = null
+            )
+        }
+    }
 
     fun toggleFavorite(){
-        _selectedBreed.update {
-            it.copy(
-                isFavorite = !isInFavorites(_selectedBreed.value.id))
-        }
-        if (_selectedBreed.value.isFavorite){
-            breedFavoriteViewModel.insertFavoriteBreed(_selectedBreed.value)
-        }else{
-            breedFavoriteViewModel.deleteFromFavoriteBreeds(_selectedBreed.value)
-        }
+        try{
+            _selectedBreed.update {
+                it.copy(
+                    isFavorite = !isInFavorites(_selectedBreed.value.id))
+            }
+            if (_selectedBreed.value.isFavorite){
+                breedFavoriteViewModel.insertFavoriteBreed(_selectedBreed.value)
+            }else{
+                breedFavoriteViewModel.deleteFromFavoriteBreeds(_selectedBreed.value)
+            }
 
-        updateStateWhenToggled(_selectedBreed.value.id)
+            updateStateWhenToggled(_selectedBreed.value.id)
+
+        }catch (e: Exception){
+            log.i("Exception in toggleFavorite: ${e.message}")
+            _selectedBreed.update {
+                makeEmptyBreed()
+            }
+            _state.update {
+                it.copy(
+                    loading = false,
+                    error = "Something went wrong with the database."
+                )
+            }
+        }
     }
     private fun updateStateWhenToggled(id: String) {
-        breedFavoriteViewModel.loadFavorites()
-        _state.update { currentState ->
-            val updatedBreeds = currentState.breeds.map { breed ->
-                if (breed.id == id) {
-                    breed.copy(isFavorite = !breed.isFavorite)
-                } else {
-                    breed
+        try {
+            breedFavoriteViewModel.loadFavorites()
+            _state.update { currentState ->
+                val updatedBreeds = currentState.breeds.map { breed ->
+                    if (breed.id == id) {
+                        breed.copy(isFavorite = !breed.isFavorite)
+                    } else {
+                        breed
+                    }
                 }
+                currentState.copy(breeds = updatedBreeds)
             }
-            currentState.copy(breeds = updatedBreeds)
+        }catch (e: Exception){
+            log.i("Exception in updateStateWhenToggled: ${e.message}")
+            _state.update{
+                it.copy(
+                    loading = false,
+                    error = "Something went wrong with the database."
+                )
+            }
+
         }
+
+
     }
 
     private fun makeEmptyBreed(): UiBreedListItem {
