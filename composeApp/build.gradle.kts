@@ -76,6 +76,9 @@ kotlin {
             implementation(libs.voyager.tabNavigator)
             implementation(libs.voyager.transitions)
 
+            // Network checker
+            implementation("network.chaintech:compose-connectivity-monitor:1.0.4")
+
 
 
             api(libs.kermit)
