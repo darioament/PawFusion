@@ -256,7 +256,7 @@ internal class BreedsListViewModel(
             isFavorite = false,
         )
     }
-    private fun isInFavorites(id: String): Boolean =
+     fun isInFavorites(id: String): Boolean =
         breedFavoriteViewModel.favorites.value.breeds.any { it.id == id }
 
     private fun calculateAverageLifeSpan(min: Int, max: Int) = (min + max) / 2

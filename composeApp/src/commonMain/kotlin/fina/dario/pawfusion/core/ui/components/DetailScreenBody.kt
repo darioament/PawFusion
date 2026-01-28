@@ -1,6 +1,15 @@
 package fina.dario.pawfusion.core.ui.components
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,6 +44,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,10 +55,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
+import cafe.adriel.voyager.transitions.CrossfadeTransition
 import fina.dario.pawfusion.core.BreedFavoritesViewModel
 import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.ThemeViewModel
+import fina.dario.pawfusion.core.ui.navigation.voyager.NavHost
+import fina.dario.pawfusion.core.ui.theme.BreedRoutineTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -65,6 +83,7 @@ fun DetailScreenBody(
     val state by breedListViewModel.state.collectAsState()
     val errorWasShown by breedListViewModel.errorWasShown.collectAsState()
     var onClick by remember { mutableStateOf({}) }
+    var showPopup by remember { mutableStateOf(false) }
 
     if(state.error != null){
         showErrorDialog = true
@@ -100,7 +119,7 @@ fun DetailScreenBody(
                         onClick = {}
                     }
                     else{
-                        onClick = { breedListViewModel.toggleFavorite() }
+                        onClick = { breedListViewModel.toggleFavorite(); showPopup = true }
                     }
                     IconButton(onClick = onClick) {
                         Icon(
@@ -181,7 +200,64 @@ fun DetailScreenBody(
     if(showErrorDialog){
         ErrorDialog(Modifier, state.error.toString(), onDismiss = {showErrorDialog = false; breedListViewModel.clearError()} )
     }
+
+    if (showPopup) {
+        AutoDismissPopup(
+            breedType = breed.type,
+            isAddToFavorite = breedListViewModel.isInFavorites(breed.id),
+            onDismiss = { showPopup = false },
+            durationMillis = 2000 // 3 seconds
+        )
+    }
 }
+@Composable
+fun AutoDismissPopup(
+    breedType: String,
+    isAddToFavorite: Boolean,
+    onDismiss: () -> Unit,
+    durationMillis: Long
+) {
+    var visible by remember { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) {
+        delay(durationMillis)
+        visible = false
+        delay(300)
+        onDismiss()
+    }
+
+    Popup(
+        alignment = Alignment.TopCenter,
+        offset = IntOffset(0, 100),
+    ) {
+        AnimatedVisibility(
+            visible = visible,
+            enter = fadeIn(animationSpec = tween(300)) + scaleIn(initialScale = 0.8f),
+            exit = fadeOut(animationSpec = tween(300)) + scaleOut(targetScale = 0.8f)
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Color(0xFF333333), RoundedCornerShape(12.dp))
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
+            ) {
+                if(isAddToFavorite)
+                    Text(
+                        text = "$breedType added to favorites!",
+                        fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                        color = Color.White)
+                else
+                    Text(
+                        text ="$breedType removed from favorites!",
+                        fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                        color = Color.White)
+
+            }
+        }
+    }
+}
+
+
+
 
 
 @Composable
