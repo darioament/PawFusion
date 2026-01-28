@@ -107,7 +107,6 @@ internal class BreedsListViewModel(
                 _allBreeds = _state.value.breeds
             }
             is Result.Error -> {
-                log.i("Result is error in getBreedList")
                 if(! errorWasShown.value){
                     _state.update{
                         it.copy(
@@ -116,11 +115,12 @@ internal class BreedsListViewModel(
                             error = "Something went wrong, Check your internet connection."
                         )
                     }
+                    errorWasShown.update {
+                        false
+                    }
                 }
 
-                errorWasShown.update {
-                    true
-                }
+
 
             }
         }
@@ -155,14 +155,16 @@ internal class BreedsListViewModel(
 
                 }
                 is Result.Error -> {
-                    log.i("Result is error in getBreedID2")
+                    _selectedBreed.update {
+                        makeEmptyBreed()
+                    }
                     _state.update{
                         it.copy(
                             loading = false,
                             error = "Something went wrong, Check your internet connection."
                         )
                     }
-                    errorWasShown.update {
+                    errorWasShown.update{
                         true
                     }
                 }

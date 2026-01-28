@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import co.touchlab.kermit.Logger
 import fina.dario.pawfusion.core.BreedFavoritesViewModel
+import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.ui.navigation.voyager.screens.DetailScreen
 import fina.dario.pawfusion.models.data.FavoriteBreedModel
 import fina.dario.pawfusion.models.data.domain.usecase.GetAllFavoriteBreedsUseCase
@@ -29,16 +30,18 @@ import org.koin.compose.koinInject
 @Composable
 fun FavoritesScreenView(){
     val breedFavoritesViewModel: BreedFavoritesViewModel = koinInject()
+    val breedListViewModel: BreedsListViewModel = koinInject()
     val favorites by breedFavoritesViewModel.favorites.collectAsState()
     val navigator = LocalNavigator.current
-    val log = Logger.withTag("PawFusionLogger")
+    val state by breedListViewModel.state.collectAsState()
+
+
 
     Box(modifier = Modifier.fillMaxSize()){
         Column(modifier = Modifier.fillMaxSize()){
             Spacer(modifier = Modifier.height(20.dp))
             LazyColumn(modifier = Modifier.fillMaxSize()){
                 items(items = favorites.breeds){ item ->
-
                     FavoritesBreedCard(
                         onClick = { navigator?.push(DetailScreen(id = item.id)) },
                         type = item.type,
