@@ -204,7 +204,7 @@ fun DetailScreenBody(
     if (showPopup) {
         AutoDismissPopup(
             breedType = breed.type,
-            isAddToFavorite = breedListViewModel.isInFavorites(breed.id),
+            isAddedToFavorite = !breedListViewModel.isInFavorites(breed.id),
             onDismiss = { showPopup = false },
             durationMillis = 2000 // 3 seconds
         )
@@ -213,7 +213,7 @@ fun DetailScreenBody(
 @Composable
 fun AutoDismissPopup(
     breedType: String,
-    isAddToFavorite: Boolean,
+    isAddedToFavorite: Boolean,
     onDismiss: () -> Unit,
     durationMillis: Long
 ) {
@@ -240,7 +240,7 @@ fun AutoDismissPopup(
                     .background(Color(0xFF333333), RoundedCornerShape(12.dp))
                     .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
-                if(isAddToFavorite)
+                if(isAddedToFavorite)
                     Text(
                         text = "$breedType added to favorites!",
                         fontSize = MaterialTheme.typography.titleSmall.fontSize,
