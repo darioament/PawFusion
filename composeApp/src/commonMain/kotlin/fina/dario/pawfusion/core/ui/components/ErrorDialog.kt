@@ -1,6 +1,7 @@
 package fina.dario.pawfusion.core.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,18 +53,20 @@ internal fun ErrorDialog(
     ){
         Column(
             modifier.fillMaxWidth()
-                .height(250.dp)
+                .wrapContentHeight()
                 .padding(top = 25.dp)
-                .background(color = Color(0xFF53565b), shape = RoundedCornerShape(12.dp)),
+                .background(color = Color(0x0f474747), shape = RoundedCornerShape(12.dp)),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
+
             Text(
                 text = "Error",
                 color = Color.White,
                 textAlign = TextAlign.Center,
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
                 fontWeight = FontWeight.SemiBold,
+                modifier = modifier.padding(top = 20.dp),
             )
             Spacer(modifier.height(15.dp))
             Text(
@@ -68,6 +75,23 @@ internal fun ErrorDialog(
                 minLines = 2,
                 textAlign = TextAlign.Center
             )
+            Spacer(modifier.height(30.dp))
+            HorizontalDivider(color = Color.Gray, thickness = 1.dp)
+            Row(
+                modifier = modifier.fillMaxWidth()
+                    .height(50.dp)
+                    .clickable(onClick = onDismiss),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ){
+                Text(
+                    text = "OK",
+                    color = Color(0xFF1e90ff),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+            }
         }
 
 
