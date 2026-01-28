@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun FavoritesBreedCard(
+    onClick: () -> Unit,
     type: String,
     averageLifeSpan: Int,
 ){
@@ -37,6 +38,7 @@ fun FavoritesBreedCard(
                 .padding(2.dp),
             shape = RoundedCornerShape(8.dp),
             elevation = CardDefaults.cardElevation(1.dp),
+            onClick = onClick
         ){
             Box(
                 modifier = Modifier

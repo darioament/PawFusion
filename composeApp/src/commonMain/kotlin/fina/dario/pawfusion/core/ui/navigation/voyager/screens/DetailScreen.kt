@@ -17,13 +17,9 @@ class DetailScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val themeViewModel: ThemeViewModel = koinInject()
-        val isDarkTheme by themeViewModel.useDynamicColors.collectAsState()
         val navigator = LocalNavigator.current
 
         DetailScreenView(id = id,  onNavigateBack = { navigator?.pop() })
-
     }
-
 }
 

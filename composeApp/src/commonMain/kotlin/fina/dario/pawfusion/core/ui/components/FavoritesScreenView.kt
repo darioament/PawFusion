@@ -16,7 +16,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import co.touchlab.kermit.Logger
 import fina.dario.pawfusion.core.BreedFavoritesViewModel
+import fina.dario.pawfusion.core.ui.navigation.voyager.screens.DetailScreen
 import fina.dario.pawfusion.models.data.FavoriteBreedModel
 import fina.dario.pawfusion.models.data.domain.usecase.GetAllFavoriteBreedsUseCase
 import kotlinx.coroutines.flow.Flow
@@ -27,14 +30,20 @@ import org.koin.compose.koinInject
 fun FavoritesScreenView(){
     val breedFavoritesViewModel: BreedFavoritesViewModel = koinInject()
     val favorites by breedFavoritesViewModel.favorites.collectAsState()
-    val isDarkTheme = isSystemInDarkTheme()
+    val navigator = LocalNavigator.current
+    val log = Logger.withTag("PawFusionLogger")
 
     Box(modifier = Modifier.fillMaxSize()){
         Column(modifier = Modifier.fillMaxSize()){
             Spacer(modifier = Modifier.height(20.dp))
             LazyColumn(modifier = Modifier.fillMaxSize()){
                 items(items = favorites.breeds){ item ->
-                    FavoritesBreedCard(item.type, item.averageLifeSpan)
+
+                    FavoritesBreedCard(
+                        onClick = { navigator?.push(DetailScreen(id = item.id)) },
+                        type = item.type,
+                        averageLifeSpan = item.averageLifeSpan
+                    )
                     }
                 }
             }

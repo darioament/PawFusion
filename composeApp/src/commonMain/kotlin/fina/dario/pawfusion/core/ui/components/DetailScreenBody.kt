@@ -59,7 +59,6 @@ fun DetailScreenBody(
     onNavigateBack: () -> Unit,
 ) {
     val breedListViewModel: BreedsListViewModel = koinInject()
-    val breedsSearchViewModel: BreedFavoritesViewModel = koinInject()
     val themeViewModel: ThemeViewModel = koinInject()
     val isDarkTheme by themeViewModel.useDynamicColors.collectAsState()
     var showErrorDialog by remember { mutableStateOf(false) }
@@ -184,11 +183,6 @@ fun DetailScreenBody(
     }
 }
 
-
-/*
-* Mock of data __
-*
-* */
 
 @Composable
 fun AttributeCard(

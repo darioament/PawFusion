@@ -59,7 +59,7 @@ class HomeScreen: Screen {
             showErrorDialog = true
         }
         else{
-            if( errorWasShown && state.error == null){
+            if( errorWasShown && state.error == null ){
                 scope.launch {
                     breedListViewModel.getAllBreeds()
                 }.invokeOnCompletion {
@@ -88,8 +88,5 @@ class HomeScreen: Screen {
         if(showErrorDialog){
             ErrorDialog(Modifier, state.error.toString(), onDismiss = {showErrorDialog = false; breedListViewModel.clearError()} )
         }
-
-
     }
-
 }
