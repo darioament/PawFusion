@@ -36,6 +36,8 @@ internal class BreedsListViewModel(
     val errorWasShown = MutableStateFlow(false)
 
 
+
+
     fun search(query: String) {
 
         CoroutineScope(Dispatchers.IO).launch {

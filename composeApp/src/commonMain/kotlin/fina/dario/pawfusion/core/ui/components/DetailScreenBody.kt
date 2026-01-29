@@ -84,6 +84,7 @@ fun DetailScreenBody(
     val errorWasShown by breedListViewModel.errorWasShown.collectAsState()
     var onClick by remember { mutableStateOf({}) }
     var showPopup by remember { mutableStateOf(false) }
+    val scope =  rememberCoroutineScope()
 
     if(state.error != null){
         showErrorDialog = true
@@ -148,7 +149,6 @@ fun DetailScreenBody(
                 )
             }
             Spacer(modifier = Modifier.height(30.dp ))
-            //PartialBottomSheet(breed)
             Box(
                 modifier = Modifier
                     .fillMaxHeight(0.75f)
@@ -296,75 +296,6 @@ fun AttributeCard(
                 )
             }
 
-        }
-    }
-
-}
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PartialBottomSheet(
-    breed: UiBreedListItem?
-) {
-    var showBottomSheet by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false,
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        ModalBottomSheet(
-            modifier = Modifier.fillMaxHeight(),
-            sheetState = sheetState,
-            onDismissRequest = { showBottomSheet = false }
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .background(
-                        color = MaterialTheme.colorScheme.outlineVariant,
-                        shape = RoundedCornerShape(25.dp)
-                    ),
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize().padding(20.dp),
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            AttributeCard(
-                                title = "Male Weight",
-                                subtitle = breed?.male_weight?.max.toString()
-                            )
-                            Spacer(modifier = Modifier.width(15.dp))
-                            AttributeCard(
-                                title = "Female Weight",
-                                subtitle = breed?.female_weight?.max.toString()
-                            )
-                            Spacer(modifier = Modifier.width(15.dp))
-                            AttributeCard(
-                                title = "Life Span",
-                                subtitle = breed?.averageLifeSpan.toString()
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(30.dp))
-                    Text(
-                        text = breed?.description ?: "Nothing",
-                        fontSize = MaterialTheme.typography.titleSmall.fontSize,
-                        color = Color.Gray,
-                        textAlign = TextAlign.Start
-                    )
-                }
-            }
         }
     }
 }
