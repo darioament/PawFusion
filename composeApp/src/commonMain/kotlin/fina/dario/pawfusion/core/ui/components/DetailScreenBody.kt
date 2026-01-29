@@ -1,15 +1,12 @@
 package fina.dario.pawfusion.core.ui.components
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,29 +17,20 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.BottomSheetScaffoldState
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -58,16 +46,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
-import cafe.adriel.voyager.transitions.CrossfadeTransition
 import com.mmk.kmpnotifier.notification.NotificationImage
 import com.mmk.kmpnotifier.notification.Notifier
 import com.mmk.kmpnotifier.notification.NotifierManager
 import fina.dario.pawfusion.core.BreedFavoritesViewModel
 import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.ThemeViewModel
-import fina.dario.pawfusion.core.ui.navigation.voyager.NavHost
-import fina.dario.pawfusion.core.ui.theme.BreedRoutineTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -91,7 +75,7 @@ fun DetailScreenBody(
     var showPopup by remember { mutableStateOf(false) }
     val scope =  rememberCoroutineScope()
     val favorites by breedFavoritesViewModel.favorites.collectAsState()
-
+    var notificationWasShown by remember { mutableStateOf(false) }
     if(state.error != null){
         showErrorDialog = true
     }
@@ -207,6 +191,13 @@ fun DetailScreenBody(
         ErrorDialog(Modifier, state.error.toString(), onDismiss = {showErrorDialog = false; breedListViewModel.clearError()} )
     }
     if(favorites.breeds.size % 10 == 0){
+        notificationWasShown = false
+        scope.launch {
+            delay(100)
+            notificationWasShown = true
+        }
+    }
+    if(favorites.breeds.size % 10 == 0 && !notificationWasShown ){
         val notifier = NotifierManager.getLocalNotifier()
         notifier.notify {
             id= Random.nextInt(0, Int.MAX_VALUE)
@@ -218,13 +209,14 @@ fun DetailScreenBody(
             )
             image = NotificationImage.Url("https://th.bing.com/th/id/R.41aa651d54d0a80c96af05c0e46d1c65?rik=PtnZ2F%2bGwJUEfA&pid=ImgRaw&r=0")
         }
+
     }
     if (showPopup) {
         AutoDismissPopup(
             breedType = breed.type,
             isAddedToFavorite = breedListViewModel.isInFavorites(breed.id),
             onDismiss = { showPopup = false },
-            durationMillis = 2000 // 3 seconds
+            durationMillis = 2000 // 2 seconds
         )
     }
 
