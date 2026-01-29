@@ -81,15 +81,14 @@ fun DetailScreenBody(
     var showPopup by remember { mutableStateOf(false) }
     val scope =  rememberCoroutineScope()
     val favorites by breedFavoritesViewModel.favorites.collectAsState()
-    var notificationWasShown by remember { mutableStateOf(false) }
     val prefs: DataStore<Preferences> = koinInject()
 
 
-    val numberOfFavorites by prefs
+    val notificationWasShown by prefs
         .data.map { dataStore ->
-            val favoritesKey = intPreferencesKey("numberOfFavorites")
-            dataStore[favoritesKey]  ?: 0
-        }.collectAsState( favorites.breeds.size )
+            val notificationKey = booleanPreferencesKey("notificationWasShown")
+            dataStore[notificationKey]  ?: true
+        }.collectAsState( false)
 
     if(state.error != null){
         showErrorDialog = true
@@ -210,27 +209,40 @@ fun DetailScreenBody(
     }
 
      // Part for notifications on every 10th added to favorite
-//    if(favorites.breeds.size % 10 == 0){
-//        notificationWasShown = false
-//        scope.launch {
-//            delay(100)
-//            notificationWasShown = true
-//        }
-//    }
-//    if(favorites.breeds.size % 10 == 0 && !notificationWasShown ){
-//        val notifier = NotifierManager.getLocalNotifier()
-//        notifier.notify {
-//            id= Random.nextInt(0, Int.MAX_VALUE)
-//            title = "PawFusion"
-//            body = "Congratulations!\nYou have reached ${favorites.breeds.size} favorites!"
-//            payloadData = mapOf(
-//                Notifier.KEY_URL to "https://github.com/mirzemehdi/KMPNotifier/",
-//                "extraKey" to "randomValue"
-//            )
-//            image = NotificationImage.Url("https://th.bing.com/th/id/R.41aa651d54d0a80c96af05c0e46d1c65?rik=PtnZ2F%2bGwJUEfA&pid=ImgRaw&r=0")
-//        }
-//
-//    }
+    if(favorites.breeds.size % 10 == 0 && !notificationWasShown){
+        scope.launch {
+            prefs.edit { datastore ->
+                val notificationKey = booleanPreferencesKey("notificationWasShown")
+                datastore[notificationKey] = false
+            }
+        }
+    }
+    if(!notificationWasShown ){
+        scope.launch {
+            breedFavoritesViewModel.loadFavorites()
+        }.invokeOnCompletion {
+            val notifier = NotifierManager.getLocalNotifier()
+            notifier.notify {
+                id= Random.nextInt(0, Int.MAX_VALUE)
+                title = "PawFusion"
+                body = "Congratulations!\nYou have reached ${favorites.breeds.size } favorites!"
+                payloadData = mapOf(
+                    Notifier.KEY_URL to "https://github.com/mirzemehdi/KMPNotifier/",
+                    "extraKey" to "randomValue"
+                )
+                image = NotificationImage.Url("https://th.bing.com/th/id/R.41aa651d54d0a80c96af05c0e46d1c65?rik=PtnZ2F%2bGwJUEfA&pid=ImgRaw&r=0")
+            }
+        }
+
+        scope.launch {
+            prefs.edit { datastore ->
+                val notificationKey = booleanPreferencesKey("notificationWasShown")
+                datastore[notificationKey] = true
+            }
+        }
+
+
+    }
     if (showPopup) {
         AutoDismissPopup(
             breedType = breed.type,
