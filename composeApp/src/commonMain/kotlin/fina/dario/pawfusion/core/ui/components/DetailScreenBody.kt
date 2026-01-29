@@ -60,6 +60,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import cafe.adriel.voyager.transitions.CrossfadeTransition
+import com.mmk.kmpnotifier.notification.NotificationImage
+import com.mmk.kmpnotifier.notification.Notifier
+import com.mmk.kmpnotifier.notification.NotifierManager
 import fina.dario.pawfusion.core.BreedFavoritesViewModel
 import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.ThemeViewModel
@@ -68,6 +71,7 @@ import fina.dario.pawfusion.core.ui.theme.BreedRoutineTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import kotlin.random.Random
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,6 +81,7 @@ fun DetailScreenBody(
     onNavigateBack: () -> Unit,
 ) {
     val breedListViewModel: BreedsListViewModel = koinInject()
+    val breedFavoritesViewModel: BreedFavoritesViewModel = koinInject()
     val themeViewModel: ThemeViewModel = koinInject()
     val isDarkTheme by themeViewModel.useDynamicColors.collectAsState()
     var showErrorDialog by remember { mutableStateOf(false) }
@@ -85,6 +90,7 @@ fun DetailScreenBody(
     var onClick by remember { mutableStateOf({}) }
     var showPopup by remember { mutableStateOf(false) }
     val scope =  rememberCoroutineScope()
+    val favorites by breedFavoritesViewModel.favorites.collectAsState()
 
     if(state.error != null){
         showErrorDialog = true
@@ -200,15 +206,28 @@ fun DetailScreenBody(
     if(showErrorDialog){
         ErrorDialog(Modifier, state.error.toString(), onDismiss = {showErrorDialog = false; breedListViewModel.clearError()} )
     }
-
+    if(favorites.breeds.size % 10 == 0){
+        val notifier = NotifierManager.getLocalNotifier()
+        notifier.notify {
+            id= Random.nextInt(0, Int.MAX_VALUE)
+            title = "PawFusion"
+            body = "Congratulations!\nYou have reached ${favorites.breeds.size} favorites!"
+            payloadData = mapOf(
+                Notifier.KEY_URL to "https://github.com/mirzemehdi/KMPNotifier/",
+                "extraKey" to "randomValue"
+            )
+            image = NotificationImage.Url("https://th.bing.com/th/id/R.41aa651d54d0a80c96af05c0e46d1c65?rik=PtnZ2F%2bGwJUEfA&pid=ImgRaw&r=0")
+        }
+    }
     if (showPopup) {
         AutoDismissPopup(
             breedType = breed.type,
-            isAddedToFavorite = !breedListViewModel.isInFavorites(breed.id),
+            isAddedToFavorite = breedListViewModel.isInFavorites(breed.id),
             onDismiss = { showPopup = false },
             durationMillis = 2000 // 3 seconds
         )
     }
+
 }
 @Composable
 fun AutoDismissPopup(

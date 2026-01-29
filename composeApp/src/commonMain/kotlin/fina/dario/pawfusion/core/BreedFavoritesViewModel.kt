@@ -57,7 +57,10 @@ internal class BreedFavoritesViewModel(
         CoroutineScope(Dispatchers.IO).launch {
             insertFavoriteBreedUseCase.insert(
                 breed.toFavoriteBreedModel())
+        }.invokeOnCompletion {
+            loadFavorites()
         }
+
     }
 
 
@@ -65,6 +68,8 @@ internal class BreedFavoritesViewModel(
         log.d("Deleting favorite breed: ${breed.type}")
         CoroutineScope(Dispatchers.IO).launch{
             deleteFavoriteBreedUseCase.deleteFavoriteBreedById(breed.id)
+        }.invokeOnCompletion {
+            loadFavorites()
         }
     }
 
