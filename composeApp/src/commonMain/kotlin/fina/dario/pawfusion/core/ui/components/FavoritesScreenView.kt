@@ -35,7 +35,7 @@ fun FavoritesScreenView(){
     val navigator = LocalNavigator.current
 
     Box(modifier = Modifier.fillMaxSize()){
-        Column(modifier = Modifier.fillMaxSize().padding(bottom = 30.dp)){
+        Column(modifier = Modifier.fillMaxSize().padding(bottom = 80.dp)){
             Spacer(modifier = Modifier.height(20.dp))
             LazyColumn(modifier = Modifier.fillMaxSize()){
                 items(items = favorites.breeds){ item ->
