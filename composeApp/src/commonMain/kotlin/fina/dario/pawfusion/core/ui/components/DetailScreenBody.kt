@@ -46,6 +46,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import com.mmk.kmpnotifier.notification.NotificationImage
 import com.mmk.kmpnotifier.notification.Notifier
 import com.mmk.kmpnotifier.notification.NotifierManager
@@ -53,6 +58,7 @@ import fina.dario.pawfusion.core.BreedFavoritesViewModel
 import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.ThemeViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import kotlin.random.Random
@@ -76,6 +82,15 @@ fun DetailScreenBody(
     val scope =  rememberCoroutineScope()
     val favorites by breedFavoritesViewModel.favorites.collectAsState()
     var notificationWasShown by remember { mutableStateOf(false) }
+    val prefs: DataStore<Preferences> = koinInject()
+
+
+    val numberOfFavorites by prefs
+        .data.map { dataStore ->
+            val favoritesKey = intPreferencesKey("numberOfFavorites")
+            dataStore[favoritesKey]  ?: 0
+        }.collectAsState( favorites.breeds.size )
+
     if(state.error != null){
         showErrorDialog = true
     }
@@ -110,7 +125,10 @@ fun DetailScreenBody(
                         onClick = {}
                     }
                     else{
-                        onClick = { breedListViewModel.toggleFavorite(); showPopup = true }
+                        onClick = {
+                            breedListViewModel.toggleFavorite();
+                            if(breedListViewModel.isInFavorites(breed.id))
+                            showPopup = true }
                     }
                     IconButton(onClick = onClick) {
                         Icon(
@@ -190,27 +208,29 @@ fun DetailScreenBody(
     if(showErrorDialog){
         ErrorDialog(Modifier, state.error.toString(), onDismiss = {showErrorDialog = false; breedListViewModel.clearError()} )
     }
-    if(favorites.breeds.size % 10 == 0){
-        notificationWasShown = false
-        scope.launch {
-            delay(100)
-            notificationWasShown = true
-        }
-    }
-    if(favorites.breeds.size % 10 == 0 && !notificationWasShown ){
-        val notifier = NotifierManager.getLocalNotifier()
-        notifier.notify {
-            id= Random.nextInt(0, Int.MAX_VALUE)
-            title = "PawFusion"
-            body = "Congratulations!\nYou have reached ${favorites.breeds.size} favorites!"
-            payloadData = mapOf(
-                Notifier.KEY_URL to "https://github.com/mirzemehdi/KMPNotifier/",
-                "extraKey" to "randomValue"
-            )
-            image = NotificationImage.Url("https://th.bing.com/th/id/R.41aa651d54d0a80c96af05c0e46d1c65?rik=PtnZ2F%2bGwJUEfA&pid=ImgRaw&r=0")
-        }
 
-    }
+     // Part for notifications on every 10th added to favorite
+//    if(favorites.breeds.size % 10 == 0){
+//        notificationWasShown = false
+//        scope.launch {
+//            delay(100)
+//            notificationWasShown = true
+//        }
+//    }
+//    if(favorites.breeds.size % 10 == 0 && !notificationWasShown ){
+//        val notifier = NotifierManager.getLocalNotifier()
+//        notifier.notify {
+//            id= Random.nextInt(0, Int.MAX_VALUE)
+//            title = "PawFusion"
+//            body = "Congratulations!\nYou have reached ${favorites.breeds.size} favorites!"
+//            payloadData = mapOf(
+//                Notifier.KEY_URL to "https://github.com/mirzemehdi/KMPNotifier/",
+//                "extraKey" to "randomValue"
+//            )
+//            image = NotificationImage.Url("https://th.bing.com/th/id/R.41aa651d54d0a80c96af05c0e46d1c65?rik=PtnZ2F%2bGwJUEfA&pid=ImgRaw&r=0")
+//        }
+//
+//    }
     if (showPopup) {
         AutoDismissPopup(
             breedType = breed.type,

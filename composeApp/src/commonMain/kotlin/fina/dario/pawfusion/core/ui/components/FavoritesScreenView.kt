@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -30,15 +31,11 @@ import org.koin.compose.koinInject
 @Composable
 fun FavoritesScreenView(){
     val breedFavoritesViewModel: BreedFavoritesViewModel = koinInject()
-    val breedListViewModel: BreedsListViewModel = koinInject()
     val favorites by breedFavoritesViewModel.favorites.collectAsState()
     val navigator = LocalNavigator.current
-    val state by breedListViewModel.state.collectAsState()
-
-
 
     Box(modifier = Modifier.fillMaxSize()){
-        Column(modifier = Modifier.fillMaxSize()){
+        Column(modifier = Modifier.fillMaxSize().padding(bottom = 30.dp)){
             Spacer(modifier = Modifier.height(20.dp))
             LazyColumn(modifier = Modifier.fillMaxSize()){
                 items(items = favorites.breeds){ item ->
@@ -51,4 +48,4 @@ fun FavoritesScreenView(){
                 }
             }
         }
-    }
+}
