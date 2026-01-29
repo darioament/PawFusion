@@ -10,6 +10,5 @@ fun MainViewController() = ComposeUIViewController(
         initKoin()
     }
 ) {
-    //val dao = koinInject<FavoriteBreedDatabase>().favoriteBreedDao()
     App()
 }

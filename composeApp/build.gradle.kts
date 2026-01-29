@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.room)
     alias(libs.plugins.ksp)
-
+    id("com.google.gms.google-services") version "4.4.0" apply false
 
 }
 
@@ -21,15 +21,7 @@ kotlin {
         }
     }
     
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
-    }
+
 
     
     sourceSets {
@@ -87,6 +79,10 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.navigation)
 
+            // Push Notification library
+            api("io.github.mirzemehdi:kmpnotifier:1.6.0")
+
+
             api("androidx.datastore:datastore:1.2.0")
             api("androidx.datastore:datastore-preferences:1.2.0")
 
@@ -94,6 +90,16 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+    }
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            export("io.github.mirzemehdi:kmpnotifier:1.6.0")
+            baseName = "ComposeApp"
+            isStatic = true
         }
     }
 }
@@ -139,3 +145,4 @@ dependencies {
     ksp(libs.room.compiler)
     debugImplementation(compose.uiTooling)
 }
+

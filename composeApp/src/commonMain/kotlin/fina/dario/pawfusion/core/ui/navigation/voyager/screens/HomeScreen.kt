@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import com.mmk.kmpnotifier.notification.NotificationImage
+import com.mmk.kmpnotifier.notification.Notifier
+import com.mmk.kmpnotifier.notification.NotifierManager
 import fina.dario.pawfusion.core.BreedsListViewModel
 import fina.dario.pawfusion.core.ui.components.BreedsListScreen
 import fina.dario.pawfusion.core.ui.components.ErrorDialog
@@ -30,6 +33,7 @@ import fina.dario.pawfusion.core.ui.components.LoadingScreen
 import fina.dario.pawfusion.core.ui.components.TopAppBar
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import kotlin.random.Random
 
 
 class HomeScreen: Screen {
@@ -82,5 +86,8 @@ class HomeScreen: Screen {
             ErrorDialog(Modifier, state.error.toString(), onDismiss = {showErrorDialog = false; breedListViewModel.clearError()} )
 
         }
+
+
+
     }
 }

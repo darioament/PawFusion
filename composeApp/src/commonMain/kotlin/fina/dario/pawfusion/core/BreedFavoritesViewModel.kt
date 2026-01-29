@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.LocalTime
 import org.koin.compose.koinInject
 
 internal class BreedFavoritesViewModel(
@@ -33,6 +34,7 @@ internal class BreedFavoritesViewModel(
     private val insertFavoriteBreedUseCase: insertFavoriteBreedUseCase,
     private val deleteFavoriteBreedUseCase: DeleteFavoriteBReedByIdUseCase,
 ): ViewModel() {
+
     private val _favorites = MutableStateFlow(BreedFavorites())
     private val log = Logger.withTag("PawFusionLogger")
     val favorites = _favorites.asStateFlow()
@@ -70,3 +72,4 @@ internal class BreedFavoritesViewModel(
         this@toSingleList.first() // Suspends until the first list is emitted
     }
 }
+
