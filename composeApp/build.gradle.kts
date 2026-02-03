@@ -30,6 +30,7 @@ kotlin {
             implementation("io.ktor:ktor-client-core:3.0.0")
         }
         androidMain.dependencies {
+            implementation("androidx.appcompat:appcompat:1.7.1")
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.activity.compose)
