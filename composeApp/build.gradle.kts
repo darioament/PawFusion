@@ -36,6 +36,8 @@ kotlin {
             implementation(libs.ktor.android)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+            implementation("androidx.biometric:biometric:1.1.0")
+            implementation("androidx.biometric:biometric-ktx:1.4.0-alpha02")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -85,6 +87,7 @@ kotlin {
 
             api("androidx.datastore:datastore:1.2.0")
             api("androidx.datastore:datastore-preferences:1.2.0")
+
 
             implementation(project(path = ":navigation"))
         }
